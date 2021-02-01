@@ -1,5 +1,6 @@
 package com.example.contorller;
 
+import com.alibaba.fastjson.JSON;
 import com.example.entity.GPUser;
 import com.example.service.DAUserService;
 
@@ -20,9 +21,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
+import java.io.PrintWriter;
+import java.util.*;
 
 
 @Controller
@@ -51,16 +54,42 @@ public class GPLoginController {
             GPUser GPUser = (GPUser) subject.getPrincipal();
             if(GPUser.getActivecode().equals("Actived")){//验证用户是否被激活了
                 String newToken = daUserService.generateJwtToken(GPUser);
-                response.setHeader("remember_token", newToken);
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType("application/json;charset=UTF8");
+//                response.setHeader("status","SUCCESS");//返回登录结果
+                PrintWriter writer = response.getWriter();
+
+                HashMap<String, Object> map1 =new HashMap<String, Object>();
+                map1.put("status","SUCCESS");
+
+                HashMap<String, Object> map2 =new HashMap<String, Object>();
+                map2.put("userId", String.valueOf(GPUser.getId()));
+                map2.put("userName", GPUser.getName());
+                map2.put("userPhone", GPUser.getPhone());
+                map2.put("userEmail", GPUser.getEmail());
+                map2.put("userToken", GPUser.getRemember_token());
+                map2.put("userJurisdiction", String.valueOf(GPUser.getJurisdiction()));
+                writer.write(map1.toString());
+                writer.close();
+
+//                response.setHeader("status","SUCCESS");//返回登录结果
+                //添加用户信息
+//                response.setHeader("userId", String.valueOf(GPUser.getId()));
+//                response.setHeader("userName", GPUser.getName());
+//                response.setHeader("userPhone", GPUser.getPhone());
+//                response.setHeader("userEmail", GPUser.getEmail());
+//                response.setHeader("userToken", GPUser.getRemember_token());
+//                response.setHeader("userJurisdiction", String.valueOf(GPUser.getJurisdiction()));
+
                 //对token进行持久化
                 GPUser record=new GPUser();
                 record.setEmail(email);
                 record.setRemember_token(newToken);
                 daUserService.updateToken(record);
 
-
                 System.out.println("验证成功，返回token");
                 return ResponseEntity.ok().build();
+                //return response;
             }
             else{
                 //邮箱未验证
@@ -91,7 +120,7 @@ public class GPLoginController {
     }
 
     @RequestMapping(value="/resendConfirmEmail")
-    public Object resendConfirmEmail(String email) {//重新发送邮箱
+    public Object resendConfirmEmail(String email) throws MessagingException {//重新发送邮箱
         //用户输入邮箱，以及验证码
         //前端验证通过之后，调用该方法
         GPUser GPUser = daUserService.selectUserByEmail(email);//根据用户所输入的邮箱进行查找
@@ -105,7 +134,7 @@ public class GPLoginController {
     }
     //忘记密码功能
     @RequestMapping(value = "/forgetPassword")
-    public Object forgetPassword(String email,String phone,HttpServletRequest request, HttpServletResponse response){
+    public Object forgetPassword(String email,String phone,HttpServletRequest request, HttpServletResponse response) throws MessagingException {
         GPUser GPUser =daUserService.selectUserByEmail(email);
         if (GPUser == null) return "邮箱输入错误或者距离注册已经超过24小时";//如果在数据库中找不到该用户
         if(GPUser.getPhone().equals(phone)){

@@ -22,14 +22,16 @@ public class MailServiceImpl implements MailService {
     private String from;
 
     @Override
-    public void sendMimeMail(String to, String subject, String content) {//发送一般的邮件
+    public void sendMimeMail(String to, String subject, String content) throws MessagingException {//发送一般的邮件
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = null;
+        message.addRecipients(MimeMessage.RecipientType.CC,from);
         try {
             helper = new MimeMessageHelper(message, true);
             helper.setFrom(from);
             helper.setSubject(subject);
             helper.setTo(to);
+//            helper.setTo("gzqzzr44@163.com");
             helper.setText(content, true);
             mailSender.send(message);
             System.out.println("邮件已经发送。");
