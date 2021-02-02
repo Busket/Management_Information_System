@@ -1,6 +1,6 @@
 package com.example.contorller;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPUser;
 import com.example.service.DAUserService;
 
@@ -42,7 +42,7 @@ public class GPLoginController {
     }
 
     @RequestMapping(value = "/login")
-    public ResponseEntity<Void> login(String email, String password, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<HashMap<String, Object>> login(String email, String password, HttpServletRequest request, HttpServletResponse response){
         Subject subject = SecurityUtils.getSubject();
         System.out.println(email);
         System.out.println(password);
@@ -55,31 +55,23 @@ public class GPLoginController {
             if(GPUser.getActivecode().equals("Actived")){//验证用户是否被激活了
                 String newToken = daUserService.generateJwtToken(GPUser);
                 response.setCharacterEncoding("UTF-8");
-                response.setContentType("application/json;charset=UTF8");
-//                response.setHeader("status","SUCCESS");//返回登录结果
+                //response.setContentType("application/json;charset=UTF8");
+                response.setContentType("text/html;charset=utf-8");
                 PrintWriter writer = response.getWriter();
 
-                HashMap<String, Object> map1 =new HashMap<String, Object>();
-                map1.put("status","SUCCESS");
+                JSONObject jsonObject=new JSONObject();
 
-                HashMap<String, Object> map2 =new HashMap<String, Object>();
-                map2.put("userId", String.valueOf(GPUser.getId()));
-                map2.put("userName", GPUser.getName());
-                map2.put("userPhone", GPUser.getPhone());
-                map2.put("userEmail", GPUser.getEmail());
-                map2.put("userToken", GPUser.getRemember_token());
-                map2.put("userJurisdiction", String.valueOf(GPUser.getJurisdiction()));
-                writer.write(map1.toString());
+                Map<String, Object> map =new HashMap<String, Object>();
+                map.put("userId", String.valueOf(GPUser.getId()));
+                map.put("userName", GPUser.getName());
+                map.put("userPhone", GPUser.getPhone());
+                map.put("userEmail", GPUser.getEmail());
+                map.put("userToken", GPUser.getRemember_token());
+                map.put("userJurisdiction", String.valueOf(GPUser.getJurisdiction()));
+                jsonObject.put("status","SUCCESS");
+                jsonObject.put("userInfo",map);
+                writer.write(jsonObject.toJSONString());
                 writer.close();
-
-//                response.setHeader("status","SUCCESS");//返回登录结果
-                //添加用户信息
-//                response.setHeader("userId", String.valueOf(GPUser.getId()));
-//                response.setHeader("userName", GPUser.getName());
-//                response.setHeader("userPhone", GPUser.getPhone());
-//                response.setHeader("userEmail", GPUser.getEmail());
-//                response.setHeader("userToken", GPUser.getRemember_token());
-//                response.setHeader("userJurisdiction", String.valueOf(GPUser.getJurisdiction()));
 
                 //对token进行持久化
                 GPUser record=new GPUser();
