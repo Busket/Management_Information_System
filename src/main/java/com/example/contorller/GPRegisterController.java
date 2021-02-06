@@ -27,28 +27,41 @@ public class GPRegisterController {
 
     //用户注册
     @RequestMapping("/register")
-    public Object register(GPUser GPUser) throws MessagingException {
+    public ResponseEntity<HashMap<String, Object>> register(GPUser GPUser, HttpServletRequest request, HttpServletResponse response) throws MessagingException, IOException {
         System.out.println("注册");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+
         int i = daUserService.insertSelective(GPUser);
         //这个应该是用来检测插入是否成功的
-        Map map = new HashMap<>();
+//        Map map = new HashMap<>();
         if (i > 0) {
-            map.put("code", ConstantUtils.successCode);
-            map.put("message", ConstantUtils.insertSuccessMsg);
-            //注册成功后，发送确认邮件
+//            map.put("code", ConstantUtils.successCode);
+//            map.put("message", ConstantUtils.insertSuccessMsg);
+            jsonObject.put("status", "Success");
+            jsonObject.put("message", "注册成功！");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+            System.out.println("注册成功");
 
+            //注册成功后，发送确认邮件
             //mailService.sendSimpleMailMessage(daUser.getEmail(),"欢迎您使用我们的系统！","请单击以下链接进行确认。");
             //发送带有邮箱以及激活码的链接，点击后进行确认操作
 //            mailService.sendMimeMail(daUser.getEmail(),"欢迎您使用我们的系统！","请单击以下链接进行确认。\n" +
 //                   "<a href=\"http://localhost:8080/emailconfirm?email="+daUser.getEmail()+"&activecode="+daUser.getActivecode()+"\">激活请点击:这里</a>");
             mailService.sendMimeMail(GPUser.getEmail(), "畅途驾校管理系统：\n欢迎您使用我们的系统！", "请复制以下激活码进行确认。\n邮箱：" + GPUser.getEmail() + "\n激活码：" + GPUser.getActivecode());
+            return ResponseEntity.ok().build();
         } else {
-            map.put("code", ConstantUtils.failCode);
-            map.put("message", ConstantUtils.insertFailMsg);
+//            map.put("code", ConstantUtils.failCode);
+//            map.put("message", ConstantUtils.insertFailMsg);
+            jsonObject.put("status", "Fail");
+            jsonObject.put("message", "注册失败！");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+            return ResponseEntity.ok().build();
         }
-        //System.out.println(i);
-        return map;
-        //return "login";
     }
 
     @RequestMapping("/emailConfirm")

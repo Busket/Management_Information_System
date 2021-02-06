@@ -43,8 +43,12 @@ public class GPLoginController {
     }
 
     @RequestMapping(value = "/login")
-    public ResponseEntity<HashMap<String, Object>> login(String email, String password, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<HashMap<String, Object>> login(String email, String password, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Subject subject = SecurityUtils.getSubject();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
         System.out.println(email);
         System.out.println(password);
         try {
@@ -55,11 +59,6 @@ public class GPLoginController {
             GPUser GPUser = (GPUser) subject.getPrincipal();
             if (GPUser.getActivecode().equals("Actived")) {//验证用户是否被激活了
                 String newToken = daUserService.generateJwtToken(GPUser);
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("text/html;charset=utf-8");
-                PrintWriter writer = response.getWriter();
-
-                JSONObject jsonObject = new JSONObject();
 
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("userId", String.valueOf(GPUser.getId()));
@@ -81,34 +80,23 @@ public class GPLoginController {
 
                 System.out.println("验证成功，返回token");
                 return ResponseEntity.ok().build();
-                //return response;
             } else {
                 //邮箱未验证
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("text/html;charset=utf-8");
-                JSONObject jsonObject = new JSONObject();
                 jsonObject.put("message", "邮箱未验证！该用户尚未激活！");
-                response.getWriter().write(jsonObject.toJSONString());
+                writer.write(jsonObject.toJSONString());
+                writer.close();
                 System.out.println("用户尚未激活！");
                 return ResponseEntity.ok().build();
             }
 
         } catch (AuthenticationException e) {
             // 如果校验失败，shiro会抛出异常，返回客户端失败
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html;charset=utf-8");
-            JSONObject jsonObject = new JSONObject();
             jsonObject.put("message", "账户或者密码不正确！请查证后再次登录！");
-            try {
-                response.getWriter().write(jsonObject.toJSONString());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            writer.write(jsonObject.toJSONString());
+            writer.close();
             System.out.println("User " + email + " login fail, Reason:" + e.getMessage());
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

@@ -31,7 +31,6 @@ public class MailServiceImpl implements MailService {
             helper.setFrom(from);
             helper.setSubject(subject);
             helper.setTo(to);
-//            helper.setTo("gzqzzr44@163.com");
             helper.setText(content, true);
             mailSender.send(message);
             System.out.println("邮件已经发送。");
