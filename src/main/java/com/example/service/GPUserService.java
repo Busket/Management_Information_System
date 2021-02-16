@@ -6,12 +6,15 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface DAUserService {
+public interface GPUserService {
     //根据邮箱查找用户
     GPUser selectUserByEmail(String email);
 
     //查询所有用户
-    PageInfo<GPUser> selectAllUser(int page, int limit);
+    List<GPUser> selectAllUser(int page, int limit);
+
+    //查询所有用户
+    Integer selectUserCount();
 
     //注册用户（添加用户）
     int insertSelective(GPUser record);

@@ -2,7 +2,7 @@ package com.example.contorller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPUser;
-import com.example.service.DAUserService;
+import com.example.service.GPUserService;
 
 import com.example.service.MailService;
 import com.example.shiro.ShiroUtil;
@@ -14,7 +14,6 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
@@ -32,7 +31,7 @@ import java.util.*;
 @Controller
 public class GPLoginController {
     @Autowired
-    private DAUserService daUserService;
+    private GPUserService GPUserService;
     @Autowired
     MailService mailService;//用于发送确认邮件
 
@@ -58,7 +57,7 @@ public class GPLoginController {
             //Shiro认证通过后会将user信息放到subject内，生成token并返回
             GPUser GPUser = (GPUser) subject.getPrincipal();
             if (GPUser.getActivecode().equals("Actived")) {//验证用户是否被激活了
-                String newToken = daUserService.generateJwtToken(GPUser);
+                String newToken = GPUserService.generateJwtToken(GPUser);
 
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("userId", String.valueOf(GPUser.getId()));
@@ -76,7 +75,7 @@ public class GPLoginController {
                 GPUser record = new GPUser();
                 record.setEmail(email);
                 record.setRemember_token(newToken);
-                daUserService.updateToken(record);
+                GPUserService.updateToken(record);
 
                 System.out.println("验证成功，返回token");
                 return ResponseEntity.ok().build();
@@ -106,7 +105,7 @@ public class GPLoginController {
         Subject subject = SecurityUtils.getSubject();
         if (subject.getPrincipals() != null) {
             GPUser GPUser = (GPUser) subject.getPrincipals().getPrimaryPrincipal();
-            daUserService.deleteLoginInfo(GPUser.getEmail());//根据email删除token
+            GPUserService.deleteLoginInfo(GPUser.getEmail());//根据email删除token
             System.out.println("用户登出成功！");
         }
         SecurityUtils.getSubject().logout();
@@ -116,20 +115,36 @@ public class GPLoginController {
 
     //忘记密码功能
     @RequestMapping(value = "/forgetPassword")
-    public Object forgetPassword(String email, String phone, HttpServletRequest request, HttpServletResponse response) throws MessagingException {
-        GPUser GPUser = daUserService.selectUserByEmail(email);
-        if (GPUser == null) return "邮箱输入错误或者距离注册已经超过24小时";//如果在数据库中找不到该用户
-        if (GPUser.getPhone().equals(phone)) {
+    public Object forgetPassword(String email, String phone, HttpServletRequest request, HttpServletResponse response) throws MessagingException, IOException {
+        GPUser GPUser = GPUserService.selectUserByEmail(email);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        if (GPUser == null) {//如果在数据库中找不到该用户
+            jsonObject.put("message", "找不到该用户！！");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+            return ResponseEntity.ok().build();
+        } else if (GPUser.getPhone().equals(phone)) {//对证手机号码是否正确
             //进入验证阶段
+
+            /*这里考虑要不要添加邮箱激活验证？*/
+
             //设置激活码
-            daUserService.resetActiveCode(email);
-            GPUser = daUserService.selectUserByEmail(email);//重新赋值
-            mailService.sendMimeMail(GPUser.getEmail(), "欢迎您使用我们的系统！", "您的账号：。\n邮箱：" + GPUser.getEmail() + " 正在修改登录密码，如有问题请联系管理员\n解锁码：" + GPUser.getActivecode());
-            response.setHeader("email", email);
-            response.setHeader("phone", phone);
+            GPUserService.resetActiveCode(email);
+            GPUser = GPUserService.selectUserByEmail(email);//重新赋值
+            mailService.sendMimeMail(GPUser.getEmail(), "畅途驾校欢迎您使用我们的系统！", "您的账号：。\n邮箱：" + GPUser.getEmail() + " 正在修改登录密码，如有问题请联系管理员\n解锁码：" + GPUser.getActivecode());
+            jsonObject.put("status", "Success");
+            jsonObject.put("message", "已找到该用户，允许密码修改！");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
             return ResponseEntity.ok().build();//"重置密码邮件以发送，转跳至填写页面resetpassword（激活码，密码）"
         } else {
-            return "邮箱与联系方式不匹配。";
+            jsonObject.put("message", "邮箱与联系方式不匹配！！");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+            return ResponseEntity.ok().build();
         }
     }
 
@@ -139,7 +154,7 @@ public class GPLoginController {
 //        DAUser daUser=new DAUser();
 //        daUser.setEmail(request.getHeader("email"));
 //        daUser.setActivecode(activecode);
-        GPUser GPUser = daUserService.selectUserByEmail(email);
+        GPUser GPUser = GPUserService.selectUserByEmail(email);
         if (GPUser == null) return "邮箱输入错误或者距离注册已经超过24小时";//如果在数据库中找不到该用户
         if (GPUser.getActivecode().equals(activecode)) {
             //此处密码做加盐加密
@@ -150,8 +165,8 @@ public class GPLoginController {
             GPUser.setPassword(encryption);
             GPUser.setSalt(salt);//存储盐
 
-            daUserService.updatePassword(GPUser);//对密码和盐进行存储
-            daUserService.changeActiveCode(email);//将激活码改回Actived
+            GPUserService.updatePassword(GPUser);//对密码和盐进行存储
+            GPUserService.changeActiveCode(email);//将激活码改回Actived
             System.out.println("密码修改成功");
             return "密码修改成功";
         } else {

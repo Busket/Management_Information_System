@@ -1,8 +1,8 @@
 package com.example.service.impl;
 
 import com.example.entity.GPUser;
-import com.example.repostitory.DAUserMapper;
-import com.example.service.DAUserService;
+import com.example.repostitory.GPUserMapper;
+import com.example.service.GPUserService;
 import com.example.shiro.ShiroUtil;
 import com.example.util.ActiveCodeUtils;
 import com.example.util.JwtUtil;
@@ -16,19 +16,25 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class DAUserimpl implements DAUserService {
+public class GPUserimpl implements GPUserService {
     @Autowired
-    private DAUserMapper daUserMapper;
+    private GPUserMapper GPUserMapper;
 
     //根据邮箱查找用户
     @Override
     public GPUser selectUserByEmail(String email) {
-        return daUserMapper.selectUserByEmail(email);
+        return GPUserMapper.selectUserByEmail(email);
     }
     //查询所有用户
     @Override
-    public PageInfo<GPUser> selectAllUser(int page, int limit) {
-        return null;
+    public List<GPUser> selectAllUser(int page, int limit) {
+        int row=(page-1)*limit;
+        return GPUserMapper.selectAllUser(row,limit);//读图个参数用于确定行数，从哪开始拿，第二个确定数量
+    }
+    //查询用户总数量
+    @Override
+    public Integer selectUserCount() {
+        return GPUserMapper.selectUserCount();//查询用户列表中有多少个
     }
 
     //注册用户（添加用户）
@@ -51,7 +57,7 @@ public class DAUserimpl implements DAUserService {
         record.setActivecode(ActiveCodeUtils.giveCode());
         System.out.println(record.getActivecode());
 
-        return daUserMapper.insertSelective(record);
+        return GPUserMapper.insertSelective(record);
     }
     //删除用户信息
     @Override
@@ -76,17 +82,17 @@ public class DAUserimpl implements DAUserService {
     //更新token
     @Override
     public int updateToken(GPUser record) {
-        return daUserMapper.updateToken(record);
+        return GPUserMapper.updateToken(record);
     }
     //删除token(登出)
     @Override
     public int deleteLoginInfo(String email) {
-        return daUserMapper.deletLoginInfo(email);
+        return GPUserMapper.deletLoginInfo(email);
     }
     //根据邮件查找激活码验证是否正确
     @Override
     public int checkActiveCodebyEmail(String email, String activecode) {
-        String dbactivecode=daUserMapper.checkActiveCodebyEmail(email);//获取数据库中的激活码
+        String dbactivecode= GPUserMapper.checkActiveCodebyEmail(email);//获取数据库中的激活码
         System.out.println(dbactivecode);
         if(dbactivecode.equals("Actived")){
             return -1;
@@ -103,7 +109,7 @@ public class DAUserimpl implements DAUserService {
     public int changeActiveCode(String email) {
         try{
             String activecode="Actived";//将激活码设置为Actived，以便登录时验证
-            daUserMapper.changeActiveCode(email,activecode);
+            GPUserMapper.changeActiveCode(email,activecode);
             return 1;
         }catch (Exception e){
             return 0;
@@ -117,7 +123,7 @@ public class DAUserimpl implements DAUserService {
         GPUser record=new GPUser();
         record.setEmail(email);
         record.setEmail_verified_at(t);
-        daUserMapper.changeActiveTime(record);
+        GPUserMapper.changeActiveTime(record);
     }
 
     //忘记密码功能中的重新设置激活码，用于验证用户
@@ -126,12 +132,12 @@ public class DAUserimpl implements DAUserService {
         //此处设置activecode
         String activeCode=ActiveCodeUtils.giveCode();
         System.out.println(email+" 忘记密码的激活码 "+activeCode);
-        daUserMapper.changeActiveCode(email,activeCode);
+        GPUserMapper.changeActiveCode(email,activeCode);
     }
 
     //更改密码以及盐
     @Override
     public void updatePassword(GPUser record) {
-        daUserMapper.updatePassword(record);
+        GPUserMapper.updatePassword(record);
     }
 }

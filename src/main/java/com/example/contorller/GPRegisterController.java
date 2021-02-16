@@ -2,9 +2,8 @@ package com.example.contorller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPUser;
-import com.example.service.DAUserService;
+import com.example.service.GPUserService;
 import com.example.service.MailService;
-import com.example.util.ConstantUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,12 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class GPRegisterController {
     @Autowired
-    private DAUserService daUserService;//用户的service层
+    private GPUserService GPUserService;//用户的service层
     @Autowired
     MailService mailService;//用于发送确认邮件
 
@@ -34,7 +32,7 @@ public class GPRegisterController {
         PrintWriter writer = response.getWriter();
         JSONObject jsonObject = new JSONObject();
 
-        int i = daUserService.insertSelective(GPUser);
+        int i = GPUserService.insertSelective(GPUser);
         //这个应该是用来检测插入是否成功的
 //        Map map = new HashMap<>();
         if (i > 0) {
@@ -51,7 +49,7 @@ public class GPRegisterController {
             //发送带有邮箱以及激活码的链接，点击后进行确认操作
 //            mailService.sendMimeMail(daUser.getEmail(),"欢迎您使用我们的系统！","请单击以下链接进行确认。\n" +
 //                   "<a href=\"http://localhost:8080/emailconfirm?email="+daUser.getEmail()+"&activecode="+daUser.getActivecode()+"\">激活请点击:这里</a>");
-            mailService.sendMimeMail(GPUser.getEmail(), "畅途驾校管理系统：\n欢迎您使用我们的系统！", "请复制以下激活码进行确认。\n邮箱：" + GPUser.getEmail() + "\n激活码：" + GPUser.getActivecode());
+            //mailService.sendMimeMail(GPUser.getEmail(), "畅途驾校管理系统：\n欢迎您使用我们的系统！", "请复制以下激活码进行确认。\n邮箱：" + GPUser.getEmail() + "\n激活码：" + GPUser.getActivecode());
             return ResponseEntity.ok().build();
         } else {
 //            map.put("code", ConstantUtils.failCode);
@@ -72,14 +70,14 @@ public class GPRegisterController {
         JSONObject jsonObject = new JSONObject();
 
         System.out.println(email + "邮箱确认");
-        int i = daUserService.checkActiveCodebyEmail(email, activeCode);//验证激活码是否正确
+        int i = GPUserService.checkActiveCodebyEmail(email, activeCode);//验证激活码是否正确
         System.out.println(i);
         //可能需要考虑到重复验证的问题，即已经验证了的，依旧去单击连接
         switch (i) {
             case 1: {
                 System.out.println("激活成功！");
-                if (daUserService.changeActiveCode(email) == 1) {//确认邮箱成功后，将激活码改为Active
-                    daUserService.changeActiveTime(email);//只有在激活码修改成功后才能对其注册时间进行修改
+                if (GPUserService.changeActiveCode(email) == 1) {//确认邮箱成功后，将激活码改为Active
+                    GPUserService.changeActiveTime(email);//只有在激活码修改成功后才能对其注册时间进行修改
                     jsonObject.put("status", "Success");
                     jsonObject.put("message", "激活成功！");
                     writer.write(jsonObject.toJSONString());
@@ -124,7 +122,7 @@ public class GPRegisterController {
 
         System.out.println(email);
         //前端验证通过之后，调用该方法
-        GPUser GPUser = daUserService.selectUserByEmail(email);//根据用户所输入的邮箱进行查找
+        GPUser GPUser = GPUserService.selectUserByEmail(email);//根据用户所输入的邮箱进行查找
         if (GPUser == null) {//如果在数据库中找不到该用户
             jsonObject.put("status", "Fail");
             jsonObject.put("message", "验证失败！找不到该用户");

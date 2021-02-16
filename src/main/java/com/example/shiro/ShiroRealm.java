@@ -2,7 +2,7 @@ package com.example.shiro;
 
 
 import com.example.entity.GPUser;
-import com.example.service.DAUserService;
+import com.example.service.GPUserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ShiroRealm extends AuthorizingRealm {
     @Autowired
-    private DAUserService daUserService;
+    private GPUserService GPUserService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -35,7 +35,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 1、查询用户是否存在；
         //登录页面传来的用户名
         String email = token.getUsername();
-        GPUser GPUser = daUserService.selectUserByEmail(email);//数据库查找是否存在该邮箱，若存在则传出对象
+        GPUser GPUser = GPUserService.selectUserByEmail(email);//数据库查找是否存在该邮箱，若存在则传出对象
         if(GPUser == null){
             System.out.println("用户不存在");
             return null;

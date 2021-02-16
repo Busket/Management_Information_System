@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.repostitory.DAUserMapper">
+<mapper namespace="com.example.repostitory.GPUserMapper">
     <resultMap id="BaseResultMap" type="com.example.entity.GPUser">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -19,8 +19,14 @@
         id,name,phone,password,email,email_verified_at,remember_token,creat_at,update_at,salt,activecode
     </sql>
     <!--查找所有用户-->
-    <select id="selectAllUser" resultMap="BaseResultMap">
-        select * from da_user
+    <select id="selectAllUser" parameterType="java.lang.Integer" resultType="com.example.entity.GPUser">
+<!--        select * from da_user-->
+        select * from da_user limit #{limit,jdbcType=INTEGER} offset #{row,jdbcType=INTEGER}
+    </select>
+    <!--查找所有用户-->
+    <select id="selectUserCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        <!--        select * from da_user-->
+        select count(*) from da_user
     </select>
     <!--通过email查找-->
     <select id="selectUserByEmail" parameterType="java.lang.String" resultType="com.example.entity.GPUser">
