@@ -36,6 +36,12 @@ public class GPUserimpl implements GPUserService {
     public Integer selectUserCount() {
         return GPUserMapper.selectUserCount();//查询用户列表中有多少个
     }
+    //关键次查询用户
+    @Override
+    public List<GPUser> selectAllUserByKeyword(String keywords, int curr, int pageSize) {
+
+        return GPUserMapper.selectAllUserByKeyword(keywords+"%","%"+keywords+"%","%"+keywords);
+    }
 
     //注册用户（添加用户）
     @Override

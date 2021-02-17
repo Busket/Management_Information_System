@@ -39,6 +39,8 @@ public interface GPUserMapper {
 
     //查看用户数量
     Integer selectUserCount();
+    //关键字查询用户
+    List<GPUser> selectAllUserByKeyword(String keywords1,String keywords2,String keywords3 );
 
 //    int deleteByPrimaryKey(Integer userId);
 //

@@ -21,9 +21,9 @@ import java.util.Map;
 public class GPUserController {
     @Autowired
     private GPUserService GPUserService;
+
     @RequestMapping(value = "/getUserList")
     public ResponseEntity<HashMap<String, Object>> getUserList(int curr, int pageSize, String keywords, HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        Subject subject = SecurityUtils.getSubject();
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
@@ -34,67 +34,52 @@ public class GPUserController {
         System.out.println(keywords);
 
         if (keywords.equals("")) {//如果关键字为空，则进行全局搜索
-
             List<GPUser> userList = GPUserService.selectAllUser(curr, pageSize);
-//            System.out.println(userList.get(2).getId());
-            System.out.println(userList.size());
+            System.out.println("listSize:" + userList.size());
             if (!userList.isEmpty()) {
                 System.out.println("开始写入json");
                 jsonObject.put("count", GPUserService.selectUserCount());
-                jsonObject.put("curr",curr);
+                jsonObject.put("curr", curr);
                 System.out.println(jsonObject.toJSONString());
                 jsonObject.put("data", userList);
                 System.out.println("写入json完成");
                 writer.write(jsonObject.toJSONString());
                 writer.close();
                 return ResponseEntity.ok().build();
-            }else{
+            } else {
                 //userList为空的情况
+                System.out.println("userList为空！");
+                jsonObject.put("message","未能查询到相关信息！");
+                writer.write(jsonObject.toJSONString());
+                writer.close();
                 return ResponseEntity.notFound().build();
             }
         } else {
             //存在关键字的情况
-            return ResponseEntity.notFound().build();
+                List<GPUser> userList = GPUserService.selectAllUserByKeyword(keywords,curr, pageSize);
+                System.out.println("listSize:" + userList.size());
+                System.out.println("开始写入json");
+                if(userList.size()>pageSize){
+                    int startIndex=(curr-1)*pageSize;//开始截取的位置
+                    int toIndex=0;
+                    if(userList.size()-startIndex>=pageSize){//这进行位置判断，特别是结尾的判断
+                        toIndex=startIndex+pageSize-1;
+                    }else{
+                        toIndex=userList.size();//直接定位到结尾
+                    }
+                    List<GPUser> childUserList  = userList.subList(startIndex,toIndex);//如果tags集合大于40条数据就就截取前35条
+                    System.out.println("listSize:" + childUserList.size());
+                    jsonObject.put("data", childUserList);
+                }else{
+                    jsonObject.put("data", userList);
+                }
+                jsonObject.put("count", userList.size());
+                jsonObject.put("curr", curr);
+//                System.out.println(jsonObject.toJSONString());
+                System.out.println("写入json完成");
+                writer.write(jsonObject.toJSONString());
+                writer.close();
+                return ResponseEntity.ok().build();
         }
-//        return ResponseEntity.notFound().build();
     }
-//        try {
-//
-//            //Shiro认证通过后会将user信息放到subject内，生成token并返回
-//            GPUser GPUser = (GPUser) subject.getPrincipal();
-//            if (GPUser.getActivecode().equals("Actived")) {//验证用户是否被激活了
-//                String newToken = daUserService.generateJwtToken(GPUser);
-//
-//
-//                map.put("userId", String.valueOf(GPUser.getId()));
-//                map.put("userName", GPUser.getName());
-//                map.put("userPhone", GPUser.getPhone());
-//                map.put("userEmail", GPUser.getEmail());
-//                map.put("userToken", GPUser.getRemember_token());
-//                map.put("userJurisdiction", String.valueOf(GPUser.getJurisdiction()));
-//                jsonObject.put("status", "SUCCESS");
-//                jsonObject.put("userInfo", map);
-//                writer.write(jsonObject.toJSONString());
-//                writer.close();
-//
-//                //对token进行持久化
-//                GPUser record = new GPUser();
-//                record.setEmail(email);
-//                record.setRemember_token(newToken);
-//                daUserService.updateToken(record);
-//
-//                System.out.println("验证成功，返回token");
-//                return ResponseEntity.ok().build();
-//            }
-//        }catch (AuthenticationException e) {
-//            // 如果校验失败，shiro会抛出异常，返回客户端失败
-//            jsonObject.put("message", "账户或者密码不正确！请查证后再次登录！");
-//            writer.write(jsonObject.toJSONString());
-//            writer.close();
-//            System.out.println("User " + email + " login fail, Reason:" + e.getMessage());
-////            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//            return ResponseEntity.ok().build();
-//        }
-//        return null;
-//    }
 }

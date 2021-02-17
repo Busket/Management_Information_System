@@ -16,6 +16,9 @@ public interface GPUserService {
     //查询所有用户
     Integer selectUserCount();
 
+    //关键字查询
+    List<GPUser> selectAllUserByKeyword(String keywords, int curr, int pageSize);
+
     //注册用户（添加用户）
     int insertSelective(GPUser record);
 
@@ -40,4 +43,5 @@ public interface GPUserService {
     void resetActiveCode(String email);
     //更改密码以及盐
     void updatePassword(GPUser record);
+
 }

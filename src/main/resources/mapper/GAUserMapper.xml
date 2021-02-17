@@ -23,10 +23,14 @@
 <!--        select * from da_user-->
         select * from da_user limit #{limit,jdbcType=INTEGER} offset #{row,jdbcType=INTEGER}
     </select>
-    <!--查找所有用户-->
+    <!--查询用户数量-->
     <select id="selectUserCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         <!--        select * from da_user-->
         select count(*) from da_user
+    </select>
+    <!--关键字查找用户列表-->
+    <select id="selectAllUserByKeyword" parameterType="java.lang.String" resultType="com.example.entity.GPUser">
+        SELECT *  FROM da_user WHERE email LIKE #{keywords1,jdbcType=VARCHAR} OR email LIKE #{keywords2,jdbcType=VARCHAR} OR email LIKE #{keywords3,jdbcType=VARCHAR}
     </select>
     <!--通过email查找-->
     <select id="selectUserByEmail" parameterType="java.lang.String" resultType="com.example.entity.GPUser">
