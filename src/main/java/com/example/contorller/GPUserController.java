@@ -3,7 +3,12 @@ package com.example.contorller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPUser;
 import com.example.service.GPUserService;
+import com.example.shiro.ShiroUtil;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -113,7 +118,7 @@ public class GPUserController {
 
     @RequestMapping(value = "/addUser")
     public ResponseEntity<HashMap<String, Object>> addUser(GPUser user, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println(user.getEmail()+"注册，权限为："+user.getJurisdiction());
+        System.out.println(user.getEmail() + "注册，权限为：" + user.getJurisdiction());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
@@ -135,4 +140,83 @@ public class GPUserController {
             return ResponseEntity.ok().build();
         }
     }
+
+    @RequestMapping(value = "/selectUserByEmail")
+    public ResponseEntity<HashMap<String, Object>> selectUserByEmail(String email, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(email);
+        //进行修改前，对用户的详细信息进行查看
+        GPUser gpUser = GPUserService.selectUserByEmail(email);
+
+        jsonObject.put("status", "SUCCESS");
+        jsonObject.put("userInfo", gpUser);
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+
+        return ResponseEntity.ok().build();
+    }
+
+    //忘记密码的重新设置功能
+    @RequestMapping(value = "/resetUserPassword")
+    public ResponseEntity<HashMap<String, Object>> resetUserPassword(String email, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(email);
+        try {
+            GPUser GPUser = GPUserService.selectUserByEmail(email);
+            String newPassword = "123456";
+            //此处密码做加盐加密
+            String salt = UUID.randomUUID().toString();
+            String message = newPassword;
+            String encryption = ShiroUtil.encryptionBySalt(salt, message);
+            //存储加密后的密码
+            GPUser.setPassword(encryption);
+            GPUser.setSalt(salt);//存储盐
+            GPUserService.updatePassword(GPUser);//对密码和盐进行存储
+            System.out.println("密码重置成功");
+
+            jsonObject.put("status", "SUCCESS");
+            jsonObject.put("message", "密码重置成功！");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            jsonObject.put("status", "Fail");
+            jsonObject.put("message", "密码重置失败！");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    //修改用户信息
+    @RequestMapping(value = "/updateUser")
+    public ResponseEntity<HashMap<String, Object>> updateUser(Integer id, String name, String email, String phone, Integer jurisdiction, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(id);
+
+        int result = GPUserService.updateUserById(id, email, name, phone, jurisdiction);
+        System.out.println(result);
+        if (result == 1) {
+            jsonObject.put("status", "SUCCESS");
+            jsonObject.put("message", "用户信息修改成功！");
+        } else {
+            jsonObject.put("status", "Fail");
+            jsonObject.put("message", "用户信息修改失败！");
+        }
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
+    }
+
 }

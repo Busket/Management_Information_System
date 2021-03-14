@@ -151,6 +151,11 @@
             delete from da_user
             where email = #{email,jdbcType=VARCHAR}
         </delete>
+    <update id="updateUserById" parameterType="com.example.entity.GPUser">
+        update da_user
+        set phone = #{phone,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},email = #{email,jdbcType=VARCHAR},jurisdiction=#{jurisdiction,jdbcType=INTEGER}
+        where id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>
         <!--    <delete id="delUserByID"  parameterType="java.util.List">-->
         <!--        delete from tbl_user-->

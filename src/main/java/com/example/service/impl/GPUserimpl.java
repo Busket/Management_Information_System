@@ -146,4 +146,9 @@ public class GPUserimpl implements GPUserService {
     public void updatePassword(GPUser record) {
         GPUserMapper.updatePassword(record);
     }
+    //根据用户邮箱更改用户信息
+    @Override
+    public int updateUserById(Integer id,String email, String name, String phone, Integer jurisdiction) {
+        return GPUserMapper.updateUserById(id,email,name,phone,jurisdiction);
+    }
 }

@@ -43,5 +43,6 @@ public interface GPUserService {
     void resetActiveCode(String email);
     //更改密码以及盐
     void updatePassword(GPUser record);
-
+    //修改用户信息
+    int updateUserById(Integer id,String email, String name, String phone, Integer jurisdiction);
 }
