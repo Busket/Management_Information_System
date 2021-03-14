@@ -42,6 +42,9 @@ public interface GPUserMapper {
     //关键字查询用户
     List<GPUser> selectAllUserByKeyword(String keywords1,String keywords2,String keywords3 );
 
+    //根据邮箱删除用户
+    Integer delUserByEmail(String email);
+
 //    int deleteByPrimaryKey(Integer userId);
 //
 //    int insert(DAUser record);

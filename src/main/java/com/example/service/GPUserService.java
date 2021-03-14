@@ -23,7 +23,7 @@ public interface GPUserService {
     int insertSelective(GPUser record);
 
     //删除用户信息
-    int delUserByID( @Param("ids") List<String> ids);
+    int delUserByEmail( String email);
 
     //修改用户的信息（可以不修改密码）
     int updateByPrimaryKeySelective(GPUser record);

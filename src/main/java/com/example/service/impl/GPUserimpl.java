@@ -43,7 +43,7 @@ public class GPUserimpl implements GPUserService {
         return GPUserMapper.selectAllUserByKeyword(keywords+"%","%"+keywords+"%","%"+keywords);
     }
 
-    //注册用户（添加用户）
+    //注册用户
     @Override
     public int insertSelective( @Param("record") GPUser record) {
         //此处密码做加盐加密
@@ -58,17 +58,17 @@ public class GPUserimpl implements GPUserService {
         //此处设置creat_at
         record.setCreat_at(t);
         record.setUpdate_at(t);
-
-        //此处设置activecode
-        record.setActivecode(ActiveCodeUtils.giveCode());
-        System.out.println(record.getActivecode());
+        //如果是超级管理员添加用户
+        if(record.getActivecode().equals("Actived")){
+            record.setEmail_verified_at(t);
+        }
 
         return GPUserMapper.insertSelective(record);
     }
     //删除用户信息
     @Override
-    public int delUserByID(List<String> ids) {
-        return 0;
+    public int delUserByEmail(String email) {
+        return GPUserMapper.delUserByEmail(email);
     }
 
     //修改用户的信息（可以不修改密码）

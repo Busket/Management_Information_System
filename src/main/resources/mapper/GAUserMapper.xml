@@ -76,9 +76,8 @@
                 activecode,
             </if>
             <if test="jurisdiction != null">
-                jurisdiction,
+                jurisdiction
             </if>
-
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -115,10 +114,11 @@
                 #{activecode,jdbcType=VARCHAR},
             </if>
             <if test="jurisdiction != null">
-                jurisdiction,
+                #{jurisdiction,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>
+
     <update id="updateToken" parameterType="com.example.entity.GPUser">
         update da_user
         set remember_token = #{remember_token,jdbcType=VARCHAR}
@@ -147,6 +147,10 @@
         set password = #{password,jdbcType=VARCHAR},salt=#{salt,jdbcType=VARCHAR}
         where email = #{email,jdbcType=VARCHAR}
     </update>
+        <delete id="delUserByEmail" parameterType="java.lang.String">
+            delete from da_user
+            where email = #{email,jdbcType=VARCHAR}
+        </delete>
 </mapper>
         <!--    <delete id="delUserByID"  parameterType="java.util.List">-->
         <!--        delete from tbl_user-->

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPUser;
 import com.example.service.GPUserService;
 import com.example.service.MailService;
+import com.example.util.ActiveCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,14 +26,20 @@ public class GPRegisterController {
 
     //用户注册
     @RequestMapping("/register")
-    public ResponseEntity<HashMap<String, Object>> register(GPUser GPUser, HttpServletRequest request, HttpServletResponse response) throws MessagingException, IOException {
-        System.out.println("注册");
+    public ResponseEntity<HashMap<String, Object>> register(GPUser gpUser, HttpServletRequest request, HttpServletResponse response) throws MessagingException, IOException {
+        gpUser.setJurisdiction(102);//设定默认注册的权限为学生（低级）
+        System.out.println(gpUser.getEmail()+"注册，权限为："+gpUser.getJurisdiction());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
         JSONObject jsonObject = new JSONObject();
 
-        int i = GPUserService.insertSelective(GPUser);
+
+        //此处设置activecode
+        gpUser.setActivecode(ActiveCodeUtils.giveCode());
+        System.out.println(gpUser.getActivecode());
+
+        int i = GPUserService.insertSelective(gpUser);
         //这个应该是用来检测插入是否成功的
 //        Map map = new HashMap<>();
         if (i > 0) {
