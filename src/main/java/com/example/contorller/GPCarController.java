@@ -83,4 +83,91 @@ public class GPCarController {
             return ResponseEntity.ok().build();
         }
     }
+
+    @RequestMapping(value = "/addCar")
+    public ResponseEntity<HashMap<String, Object>> addCar(GPCar car, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+
+        int i = gpCarService.insertCar(car);
+        if (i > 0) {
+            jsonObject.put("status", "Success");
+            jsonObject.put("message", "用户添加成功！");
+        } else {
+            jsonObject.put("status", "Fail");
+            jsonObject.put("message", "用户添加失败！");
+        }
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        System.out.println("车辆添加成功");
+        return ResponseEntity.ok().build();
+    }
+    @RequestMapping(value = "/deleteCar")
+    public ResponseEntity<HashMap<String, Object>> deleteCar(Integer id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("准备删除："+id);
+
+        try {
+            gpCarService.delCarById(id);//交由service层进行删除工作
+
+            System.out.println(id + "  删除完成");
+            jsonObject.put("message", "Success");
+            System.out.println("写入json完成");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+            return ResponseEntity.ok().build();
+        } catch (Exception exception) {
+            System.out.println(id + "删除失败");
+            jsonObject.put("error", exception.toString());
+            System.out.println("写入json完成");
+            writer.write(jsonObject.toJSONString());
+            writer.close();
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @RequestMapping(value = "/selectCarById")
+    public ResponseEntity<HashMap<String, Object>> selectCarById(Integer id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("单独查询："+id);
+        //进行修改前，对用户的详细信息进行查看
+        GPCar gpCar = gpCarService.selectCarById(id);
+
+        jsonObject.put("status", "SUCCESS");
+        jsonObject.put("carInfo", gpCar);
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+
+        return ResponseEntity.ok().build();
+    }
+    //修改车辆信息
+    @RequestMapping(value = "/updateCar")
+    public ResponseEntity<HashMap<String, Object>> updateCar(Integer id,String VIN, String CarNumber, String Brand, Integer Status, String ChargeMan, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("准备开始修改："+id);
+
+        int result = gpCarService.updateCarById(id, VIN, CarNumber, Brand, Status,ChargeMan);
+        System.out.println(result);
+        if (result == 1) {
+            jsonObject.put("status", "SUCCESS");
+            jsonObject.put("message", "车辆信息修改成功！");
+        } else {
+            jsonObject.put("status", "Fail");
+            jsonObject.put("message", "车辆信息修改失败！");
+        }
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
+    }
 }

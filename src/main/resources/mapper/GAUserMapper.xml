@@ -20,7 +20,7 @@
     </sql>
     <!--查找所有用户-->
     <select id="selectAllUser" parameterType="java.lang.Integer" resultType="com.example.entity.GPUser">
-<!--        select * from da_user-->
+        <!--        select * from da_user-->
         select * from da_user limit #{limit,jdbcType=INTEGER} offset #{row,jdbcType=INTEGER}
     </select>
     <!--查询用户数量-->
@@ -30,7 +30,8 @@
     </select>
     <!--关键字查找用户列表-->
     <select id="selectAllUserByKeyword" parameterType="java.lang.String" resultType="com.example.entity.GPUser">
-        SELECT *  FROM da_user WHERE email LIKE #{keywords1,jdbcType=VARCHAR} OR email LIKE #{keywords2,jdbcType=VARCHAR} OR email LIKE #{keywords3,jdbcType=VARCHAR}
+        SELECT * FROM da_user WHERE email LIKE #{keywords1,jdbcType=VARCHAR} OR email LIKE #{keywords2,jdbcType=VARCHAR}
+        OR email LIKE #{keywords3,jdbcType=VARCHAR}
     </select>
     <!--通过email查找-->
     <select id="selectUserByEmail" parameterType="java.lang.String" resultType="com.example.entity.GPUser">
@@ -147,13 +148,14 @@
         set password = #{password,jdbcType=VARCHAR},salt=#{salt,jdbcType=VARCHAR}
         where email = #{email,jdbcType=VARCHAR}
     </update>
-        <delete id="delUserByEmail" parameterType="java.lang.String">
-            delete from da_user
-            where email = #{email,jdbcType=VARCHAR}
-        </delete>
+    <delete id="delUserByEmail" parameterType="java.lang.String">
+        delete from da_user
+        where email = #{email,jdbcType=VARCHAR}
+    </delete>
     <update id="updateUserById" parameterType="com.example.entity.GPUser">
         update da_user
-        set phone = #{phone,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},email = #{email,jdbcType=VARCHAR},jurisdiction=#{jurisdiction,jdbcType=INTEGER},update_at=#{update_at,jdbcType=TIMESTAMP}
+        set phone = #{phone,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},email =
+        #{email,jdbcType=VARCHAR},jurisdiction=#{jurisdiction,jdbcType=INTEGER},update_at=#{update_at,jdbcType=TIMESTAMP}
         where id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

@@ -27,4 +27,76 @@
     <select id="selectAllCarByKeyword" parameterType="java.lang.String" resultType="com.example.entity.GPCar">
         SELECT *  FROM gp_vehicle WHERE carNumber LIKE #{keywords1,jdbcType=VARCHAR} OR carNumber LIKE #{keywords2,jdbcType=VARCHAR} OR carNumber LIKE #{keywords3,jdbcType=VARCHAR}
     </select>
+    <!--注册用户（插入用户）-->
+    <insert id="insertCar" parameterType="com.example.entity.GPCar">
+        insert into gp_vehicle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="carNumber != null">
+                carNumber,
+            </if>
+            <if test="VIN != null">
+                VIN,
+            </if>
+            <if test="chargeMan != null">
+                chargeMan,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="brand != null">
+                brand,
+            </if>
+            <if test="create_at != null">
+                create_at,
+            </if>
+            <if test="update_at != null">
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{Id,jdbcType=INTEGER},
+            </if>
+            <if test="carNumber != null">
+                #{CarNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="VIN != null">
+                #{VIN,jdbcType=VARCHAR},
+            </if>
+            <if test="chargeMan != null">
+                #{ChargeMan,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{Status,jdbcType=VARCHAR},
+            </if>
+            <if test="brand != null">
+                #{Brand,jdbcType=VARCHAR},
+            </if>
+            <if test="create_at != null">
+                #{create_at,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_at != null">
+                #{update_at,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <delete id="delCarById" parameterType="java.lang.Integer">
+        delete from gp_vehicle
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectCarById" parameterType="java.lang.Integer" resultType="com.example.entity.GPCar">
+        select *
+        from gp_vehicle
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <update id="updateCarById" parameterType="com.example.entity.GPCar">
+        update gp_vehicle
+        set carNumber = #{carNumber,jdbcType=VARCHAR},VIN=#{vin,jdbcType=VARCHAR},brand=#{brand,jdbcType=VARCHAR},status =
+        #{status,jdbcType=INTEGER},chargeMan=#{chargeMan,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP}
+        where id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

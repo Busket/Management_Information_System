@@ -41,7 +41,7 @@ public class GPUserimpl implements GPUserService {
         return GPUserMapper.selectAllUserByKeyword(keywords+"%","%"+keywords+"%","%"+keywords);
     }
 
-    //注册用户
+    //添加用户
     @Override
     public int insertSelective( @Param("record") GPUser record) {
         //此处密码做加盐加密

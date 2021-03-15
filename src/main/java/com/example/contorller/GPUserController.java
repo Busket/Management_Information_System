@@ -95,7 +95,6 @@ public class GPUserController {
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
         JSONObject jsonObject = new JSONObject();
-        Map<String, Object> map = new HashMap<String, Object>();
         System.out.println(email);
 
         try {
@@ -107,7 +106,7 @@ public class GPUserController {
             writer.close();
             return ResponseEntity.ok().build();
         } catch (Exception exception) {
-            System.out.println(email + "删除完成");
+            System.out.println(email + "删除失败");
             jsonObject.put("error", exception.toString());
             System.out.println("写入json完成");
             writer.write(jsonObject.toJSONString());
