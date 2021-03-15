@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.repostitory.GPUserMapper">
+<mapper namespace="com.example.repository.GPUserMapper">
     <resultMap id="BaseResultMap" type="com.example.entity.GPUser">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -153,7 +153,7 @@
         </delete>
     <update id="updateUserById" parameterType="com.example.entity.GPUser">
         update da_user
-        set phone = #{phone,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},email = #{email,jdbcType=VARCHAR},jurisdiction=#{jurisdiction,jdbcType=INTEGER}
+        set phone = #{phone,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR},email = #{email,jdbcType=VARCHAR},jurisdiction=#{jurisdiction,jdbcType=INTEGER},update_at=#{update_at,jdbcType=TIMESTAMP}
         where id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

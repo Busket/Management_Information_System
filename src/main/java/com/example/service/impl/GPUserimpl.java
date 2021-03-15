@@ -1,12 +1,11 @@
 package com.example.service.impl;
 
 import com.example.entity.GPUser;
-import com.example.repostitory.GPUserMapper;
+import com.example.repository.GPUserMapper;
 import com.example.service.GPUserService;
 import com.example.shiro.ShiroUtil;
 import com.example.util.ActiveCodeUtils;
 import com.example.util.JwtUtil;
-import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,6 @@ public class GPUserimpl implements GPUserService {
     //关键次查询用户
     @Override
     public List<GPUser> selectAllUserByKeyword(String keywords, int curr, int pageSize) {
-
         return GPUserMapper.selectAllUserByKeyword(keywords+"%","%"+keywords+"%","%"+keywords);
     }
 
@@ -149,6 +147,10 @@ public class GPUserimpl implements GPUserService {
     //根据用户邮箱更改用户信息
     @Override
     public int updateUserById(Integer id,String email, String name, String phone, Integer jurisdiction) {
-        return GPUserMapper.updateUserById(id,email,name,phone,jurisdiction);
+        Timestamp update_at= new Timestamp(System.currentTimeMillis());
+
+
+
+        return GPUserMapper.updateUserById(id,email,name,phone,jurisdiction,update_at);
     }
 }

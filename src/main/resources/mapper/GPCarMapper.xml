@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.repository.GPCarMapper">
+    <resultMap id="BaseResultMap" type="com.example.entity.GPCar">
+        <id column="id" jdbcType="INTEGER" property="Id"/>
+        <result column="VIN" jdbcType="VARCHAR" property="VIN"/>
+        <result column="carNumber" jdbcType="VARCHAR" property="CarNumber"/>
+        <result column="chargeMan" jdbcType="VARCHAR" property="ChargeMan"/>
+        <result column="status" jdbcType="INTEGER" property="Status"/>
+        <result column="brand" jdbcType="VARCHAR" property="Brand"/>
+        <result column="create_at" jdbcType="TIMESTAMP" property="create_at"/>
+        <result column="update_at" jdbcType="TIMESTAMP" property="update_at"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,VIN,carNumber,chargeMan,status,brand,create_at,update_at
+    </sql>
+    <!--查找所有用户-->
+    <select id="selectAllCar" parameterType="java.lang.Integer" resultType="com.example.entity.GPCar">
+        select * from gp_vehicle limit #{pageSize,jdbcType=INTEGER} offset #{row,jdbcType=INTEGER}
+    </select>
+    <!--查询用户数量-->
+    <select id="selectCarCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        <!--        select * from da_user-->
+        select count(*) from gp_vehicle
+    </select>
+    <!--关键字查找用户列表-->
+    <select id="selectAllCarByKeyword" parameterType="java.lang.String" resultType="com.example.entity.GPCar">
+        SELECT *  FROM gp_vehicle WHERE carNumber LIKE #{keywords1,jdbcType=VARCHAR} OR carNumber LIKE #{keywords2,jdbcType=VARCHAR} OR carNumber LIKE #{keywords3,jdbcType=VARCHAR}
+    </select>
+</mapper>

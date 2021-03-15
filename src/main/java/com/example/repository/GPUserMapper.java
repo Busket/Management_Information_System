@@ -1,9 +1,10 @@
-package com.example.repostitory;
+package com.example.repository;
 
 import com.example.entity.GPUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -47,7 +48,7 @@ public interface GPUserMapper {
     Integer delUserByEmail(String email);
 
     //根据邮箱更改用户信息
-    Integer updateUserById(Integer id,String email, String name, String phone, Integer jurisdiction);
+    Integer updateUserById(Integer id, String email, String name, String phone, Integer jurisdiction, Timestamp update_at);
 //    int deleteByPrimaryKey(Integer userId);
 //
 //    int insert(DAUser record);
