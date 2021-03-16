@@ -2,9 +2,7 @@ package com.example.contorller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPCar;
-import com.example.entity.GPUser;
 import com.example.service.GPCarService;
-import com.example.service.GPUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -104,6 +102,7 @@ public class GPCarController {
         System.out.println("车辆添加成功");
         return ResponseEntity.ok().build();
     }
+
     @RequestMapping(value = "/deleteCar")
     public ResponseEntity<HashMap<String, Object>> deleteCar(Integer id, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");

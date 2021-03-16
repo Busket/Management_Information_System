@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.repository.GPStaffMapper">
+    <resultMap id="BaseResultMap" type="com.example.entity.GPStaff">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="dept_no" jdbcType="VARCHAR" property="dept_no"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="age" jdbcType="VARCHAR" property="age"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="id_no" jdbcType="INTEGER" property="id_no"/>
+        <result column="department" jdbcType="INTEGER" property="department"/>
+        <result column="position" jdbcType="VARCHAR" property="position"/>
+        <result column="create_at" jdbcType="TIMESTAMP" property="create_at"/>
+        <result column="update_at" jdbcType="TIMESTAMP" property="update_at"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,dept_no,name,age,email,phone,address,id_no,department,position,create_at,update_at
+    </sql>
+    <!--查找所有员工-->
+    <select id="selectAllStaff" resultType="com.example.entity.GPStaff">
+        select * from
+        <if test="department == 211">
+            gp_dept_bgs
+        </if>
+        <if test="department == 212">
+            gp_dept_xxzx
+        </if>
+        <if test="department == 213">
+            gp_dept_jlk
+        </if>
+        <if test="department == 214">
+            gp_dept_jwk
+        </if>
+        <if test="department == 215">
+            gp_dept_ywk
+        </if>
+        <if test="department == 216">
+            gp_dept_cwk
+        </if>
+        <if test="department == 217">
+            gp_dept_zwk
+        </if>
+        <if test="department == 218">
+            gp_dept_ldc
+        </if>
+        limit #{pageSize,jdbcType=INTEGER} offset #{row,jdbcType=INTEGER}
+    </select>
+    <!--查询员工数量-->
+    <select id="selectStaffCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from
+        <if test="department == 211">
+            gp_dept_bgs
+        </if>
+        <if test="department == 212">
+            gp_dept_xxzx
+        </if>
+        <if test="department == 213">
+            gp_dept_jlk
+        </if>
+        <if test="department == 214">
+            gp_dept_jwk
+        </if>
+        <if test="department == 215">
+            gp_dept_ywk
+        </if>
+        <if test="department == 216">
+            gp_dept_cwk
+        </if>
+        <if test="department == 217">
+            gp_dept_zwk
+        </if>
+        <if test="department == 218">
+            gp_dept_ldc
+        </if>
+    </select>
+    <!--关键字查找员工列表-->
+    <select id="selectStaffByKeyword" parameterType="java.lang.String" resultType="com.example.entity.GPStaff">
+        SELECT * FROM
+        <if test="department == 211">
+            gp_dept_bgs
+        </if>
+        <if test="department == 212">
+            gp_dept_xxzx
+        </if>
+        <if test="department == 213">
+            gp_dept_jlk
+        </if>
+        <if test="department == 214">
+            gp_dept_jwk
+        </if>
+        <if test="department == 215">
+            gp_dept_ywk
+        </if>
+        <if test="department == 216">
+            gp_dept_cwk
+        </if>
+        <if test="department == 217">
+            gp_dept_zwk
+        </if>
+        <if test="department == 218">
+            gp_dept_ldc
+        </if>
+        WHERE carNumber LIKE #{keywords1,jdbcType=VARCHAR} OR carNumber LIKE
+        #{keywords2,jdbcType=VARCHAR} OR carNumber LIKE #{keywords3,jdbcType=VARCHAR}
+    </select>
+    <!--添加员工-->
+    <insert id="insertStaff" parameterType="com.example.entity.GPStaff">
+        insert into
+        <if test="department == 211">
+            gp_dept_bgs
+        </if>
+        <if test="department == 212">
+            gp_dept_xxzx
+        </if>
+        <if test="department == 213">
+            gp_dept_jlk
+        </if>
+        <if test="department == 214">
+            gp_dept_jwk
+        </if>
+        <if test="department == 215">
+            gp_dept_ywk
+        </if>
+        <if test="department == 216">
+            gp_dept_cwk
+        </if>
+        <if test="department == 217">
+            gp_dept_zwk
+        </if>
+        <if test="department == 218">
+            gp_dept_ldc
+        </if>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dept_no != null">
+                dept_no,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="id_no != null">
+                id_no,
+            </if>
+            <if test="department != null">
+                department,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="create_at != null">
+                create_at,
+            </if>
+            <if test="update_at != null">
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="dept_no != null">
+                #{dept_no,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="id_no != null">
+                #{id_no,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                #{department,jdbcType=INTEGER},
+            </if>
+            <if test="position != null">
+                #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="create_at != null">
+                #{create_at,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_at != null">
+                #{update_at,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <delete id="delStaffById" parameterType="java.lang.Integer">
+        delete from
+        <if test="department == 211">
+            gp_dept_bgs
+        </if>
+        <if test="department == 212">
+            gp_dept_xxzx
+        </if>
+        <if test="department == 213">
+            gp_dept_jlk
+        </if>
+        <if test="department == 214">
+            gp_dept_jwk
+        </if>
+        <if test="department == 215">
+            gp_dept_ywk
+        </if>
+        <if test="department == 216">
+            gp_dept_cwk
+        </if>
+        <if test="department == 217">
+            gp_dept_zwk
+        </if>
+        <if test="department == 218">
+            gp_dept_ldc
+        </if>
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectStaffById" parameterType="java.lang.Integer" resultType="com.example.entity.GPStaff">
+        select * from
+        <if test="department == 211">
+            gp_dept_bgs
+        </if>
+        <if test="department == 212">
+            gp_dept_xxzx
+        </if>
+        <if test="department == 213">
+            gp_dept_jlk
+        </if>
+        <if test="department == 214">
+            gp_dept_jwk
+        </if>
+        <if test="department == 215">
+            gp_dept_ywk
+        </if>
+        <if test="department == 216">
+            gp_dept_cwk
+        </if>
+        <if test="department == 217">
+            gp_dept_zwk
+        </if>
+        <if test="department == 218">
+            gp_dept_ldc
+        </if>
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+        <update id="updateStaff" parameterType="com.example.entity.GPStaff">
+            update
+            <if test="department == 211">
+                gp_dept_bgs
+            </if>
+            <if test="department == 212">
+                gp_dept_xxzx
+            </if>
+            <if test="department == 213">
+                gp_dept_jlk
+            </if>
+            <if test="department == 214">
+                gp_dept_jwk
+            </if>
+            <if test="department == 215">
+                gp_dept_ywk
+            </if>
+            <if test="department == 216">
+                gp_dept_cwk
+            </if>
+            <if test="department == 217">
+                gp_dept_zwk
+            </if>
+            <if test="department == 218">
+                gp_dept_ldc
+            </if>
+            set carNumber = #{carNumber,jdbcType=VARCHAR},VIN=#{vin,jdbcType=VARCHAR},brand=#{brand,jdbcType=VARCHAR},status =
+            #{status,jdbcType=INTEGER},chargeMan=#{chargeMan,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP}
+            where id=#{id,jdbcType=INTEGER}
+        </update>
+</mapper>
