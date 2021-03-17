@@ -4,6 +4,7 @@ import com.example.entity.GPStaff;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -20,4 +21,6 @@ public interface GPStaffMapper {
     Integer delStaffById(Integer id, Integer department);
 
     GPStaff selectStaffById(Integer id, Integer department);
+
+    Integer updateStaff(Integer id, String name, String email, Integer age, String phone, String address, Integer department, String id_no, String position, Timestamp update_at);
 }

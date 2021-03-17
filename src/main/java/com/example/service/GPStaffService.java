@@ -15,6 +15,8 @@ public interface GPStaffService {
     List<GPStaff> selectStaffByKeyword(String keywords, int curr, int pageSize, Integer department);
 //删除员工信息
     Integer delStaffById(Integer id, Integer department);
-
+//通过id和部门查找员工
     GPStaff selectStaffById(Integer id, Integer department);
+//修改员工信息
+    Integer updateStaff(Integer id, String name, String email,Integer age, String phone, String address, Integer department, String id_no, String position);
 }

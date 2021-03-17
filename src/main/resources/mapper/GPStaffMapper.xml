@@ -5,7 +5,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="dept_no" jdbcType="VARCHAR" property="dept_no"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="age" jdbcType="VARCHAR" property="age"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
@@ -102,8 +102,8 @@
         <if test="department == 218">
             gp_dept_ldc
         </if>
-        WHERE carNumber LIKE #{keywords1,jdbcType=VARCHAR} OR carNumber LIKE
-        #{keywords2,jdbcType=VARCHAR} OR carNumber LIKE #{keywords3,jdbcType=VARCHAR}
+        WHERE name LIKE #{keywords1,jdbcType=VARCHAR} OR name LIKE
+        #{keywords2,jdbcType=VARCHAR} OR name LIKE #{keywords3,jdbcType=VARCHAR}
     </select>
     <!--添加员工-->
     <insert id="insertStaff" parameterType="com.example.entity.GPStaff">
@@ -181,7 +181,7 @@
                 #{name,jdbcType=VARCHAR},
             </if>
             <if test="age != null">
-                #{age,jdbcType=VARCHAR},
+                #{age,jdbcType=INTEGER},
             </if>
             <if test="email != null">
                 #{email,jdbcType=VARCHAR},
@@ -266,7 +266,7 @@
         </if>
         where id = #{id,jdbcType=INTEGER}
     </select>
-        <update id="updateStaff" parameterType="com.example.entity.GPStaff">
+        <update id="updateStaff" >
             update
             <if test="department == 211">
                 gp_dept_bgs
@@ -292,8 +292,9 @@
             <if test="department == 218">
                 gp_dept_ldc
             </if>
-            set carNumber = #{carNumber,jdbcType=VARCHAR},VIN=#{vin,jdbcType=VARCHAR},brand=#{brand,jdbcType=VARCHAR},status =
-            #{status,jdbcType=INTEGER},chargeMan=#{chargeMan,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP}
+            set name = #{name,jdbcType=VARCHAR},age=#{age,jdbcType=INTEGER },email=#{email,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},address=#{address,jdbcType=INTEGER},
+            id_no=#{id_no,jdbcType=VARCHAR},position=#{position,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP}
             where id=#{id,jdbcType=INTEGER}
         </update>
 </mapper>

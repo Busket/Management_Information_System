@@ -119,6 +119,7 @@ public class GPDepartmentController {
         writer.close();
         return ResponseEntity.ok().build();
     }
+
     @RequestMapping(value = "/selectStaffById")
     public ResponseEntity<HashMap<String, Object>> selectStaffById(Integer id,Integer department, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -130,7 +131,7 @@ public class GPDepartmentController {
         GPStaff gpStaff = gpStaffService.selectStaffById(id,department);
 
         jsonObject.put("status", "SUCCESS");
-        jsonObject.put("carInfo", gpStaff);
+        jsonObject.put("staffInfo", gpStaff);
 
         writer.write(jsonObject.toJSONString());
         writer.close();
@@ -138,14 +139,14 @@ public class GPDepartmentController {
     }
 
     @RequestMapping(value = "/updateStaff")
-    public ResponseEntity<HashMap<String, Object>> updateStaff(Integer id,String VIN, String CarNumber, String Brand, Integer Status, String ChargeMan, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<HashMap<String, Object>> updateStaff(Integer id,String name,String email,Integer age, String phone, String address, Integer department, String id_no,  String position,HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
         JSONObject jsonObject = new JSONObject();
         System.out.println("准备开始修改："+id);
-
-        int result = gpStaffService.updateStaff(id, VIN, CarNumber, Brand, Status,ChargeMan);
+        System.out.println(age);
+        int result = gpStaffService.updateStaff(id,name,email,age,phone,address,department,id_no,position);
         System.out.println(result);
         if (result == 1) {
             jsonObject.put("status", "SUCCESS");

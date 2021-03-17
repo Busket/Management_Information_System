@@ -15,7 +15,7 @@ public class GPStaff {
     Integer id;//序号
     String dept_no;//工号
     String name;//名字
-    String age;//年龄
+    Integer age;//年龄
     String email;//邮箱
     String phone;//联系方式
     String address;//地址
@@ -49,11 +49,11 @@ public class GPStaff {
         this.name = name;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

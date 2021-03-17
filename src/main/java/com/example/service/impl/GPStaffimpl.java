@@ -88,5 +88,12 @@ public class GPStaffimpl implements GPStaffService {
     public GPStaff selectStaffById(Integer id, Integer department) {
         return gpStaffMapper.selectStaffById(id,department);
     }
+
+    @Override
+    public Integer updateStaff(Integer id, String name, String email,Integer age, String phone, String address, Integer department, String id_no, String position) {
+        //获取timestamp
+        Timestamp update_at = new Timestamp(System.currentTimeMillis());
+        return gpStaffMapper.updateStaff(id,name, email,age, phone, address, department, id_no, position,update_at);
+    }
 }
 
