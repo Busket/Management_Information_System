@@ -23,4 +23,6 @@ public interface GPStaffMapper {
     GPStaff selectStaffById(Integer id, Integer department);
 
     Integer updateStaff(Integer id, String name, String email, Integer age, String phone, String address, Integer department, String id_no, String position, Timestamp update_at);
+
+    List<GPStaff> selectCoach();
 }

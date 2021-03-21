@@ -209,6 +209,7 @@
             </if>
         </trim>
     </insert>
+    <!--删除员工-->
     <delete id="delStaffById" parameterType="java.lang.Integer">
         delete from
         <if test="department == 211">
@@ -237,7 +238,7 @@
         </if>
         where id = #{id,jdbcType=INTEGER}
     </delete>
-
+    <!--通过id查找员工-->
     <select id="selectStaffById" parameterType="java.lang.Integer" resultType="com.example.entity.GPStaff">
         select * from
         <if test="department == 211">
@@ -266,35 +267,40 @@
         </if>
         where id = #{id,jdbcType=INTEGER}
     </select>
-        <update id="updateStaff" >
-            update
-            <if test="department == 211">
-                gp_dept_bgs
-            </if>
-            <if test="department == 212">
-                gp_dept_xxzx
-            </if>
-            <if test="department == 213">
-                gp_dept_jlk
-            </if>
-            <if test="department == 214">
-                gp_dept_jwk
-            </if>
-            <if test="department == 215">
-                gp_dept_ywk
-            </if>
-            <if test="department == 216">
-                gp_dept_cwk
-            </if>
-            <if test="department == 217">
-                gp_dept_zwk
-            </if>
-            <if test="department == 218">
-                gp_dept_ldc
-            </if>
-            set name = #{name,jdbcType=VARCHAR},age=#{age,jdbcType=INTEGER },email=#{email,jdbcType=VARCHAR},
-            phone = #{phone,jdbcType=VARCHAR},address=#{address,jdbcType=INTEGER},
-            id_no=#{id_no,jdbcType=VARCHAR},position=#{position,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP}
-            where id=#{id,jdbcType=INTEGER}
-        </update>
+    <!--修改员工-->
+    <update id="updateStaff">
+        update
+        <if test="department == 211">
+            gp_dept_bgs
+        </if>
+        <if test="department == 212">
+            gp_dept_xxzx
+        </if>
+        <if test="department == 213">
+            gp_dept_jlk
+        </if>
+        <if test="department == 214">
+            gp_dept_jwk
+        </if>
+        <if test="department == 215">
+            gp_dept_ywk
+        </if>
+        <if test="department == 216">
+            gp_dept_cwk
+        </if>
+        <if test="department == 217">
+            gp_dept_zwk
+        </if>
+        <if test="department == 218">
+            gp_dept_ldc
+        </if>
+        set name = #{name,jdbcType=VARCHAR},age=#{age,jdbcType=INTEGER },email=#{email,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},address=#{address,jdbcType=INTEGER},
+        id_no=#{id_no,jdbcType=VARCHAR},position=#{position,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP}
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+    <!--查找教练-->
+    <select id="selectCoach"  resultType="com.example.entity.GPStaff">
+        SELECT name,dept_no FROM gp_dept_jlk
+    </select>
 </mapper>

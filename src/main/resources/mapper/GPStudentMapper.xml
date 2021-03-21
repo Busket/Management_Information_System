@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.repository.GPStudentMapper">
+    <resultMap id="BaseResultMap" type="com.example.entity.GPStudent">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="payment" jdbcType="VARCHAR" property="payment"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="coach" jdbcType="VARCHAR" property="coach"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_at" jdbcType="TIMESTAMP" property="create_at"/>
+        <result column="update_at" jdbcType="TIMESTAMP" property="update_at"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,number,name,age,email,phone,payment,status,coach,remark,create_at,update_at
+    </sql>
+    <!--添加学生-->
+    <insert id="insertStudent" parameterType="com.example.entity.GPStudent">
+        insert into gp_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="payment != null">
+                payment,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="coach != null">
+                coach,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="create_at != null">
+                create_at,
+            </if>
+            <if test="update_at != null">
+                update_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="payment != null">
+                #{payment,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="coach != null">
+                #{coach,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="create_at != null">
+                #{create_at,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_at != null">
+                #{update_at,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <!--查找所有用户-->
+    <select id="selectAllStudent" parameterType="java.lang.Integer" resultType="com.example.entity.GPStudent">
+        select * from gp_student limit #{pageSize,jdbcType=INTEGER} offset #{row,jdbcType=INTEGER}
+    </select>
+    <!--查询学生数量-->
+    <select id="selectStudentCount"  resultType="java.lang.Integer">
+        select count(*) from gp_student
+    </select>
+    <!--关键字查找学生列表-->
+    <select id="selectAllStudentByKeyword" parameterType="java.lang.String" resultType="com.example.entity.GPStudent">
+        SELECT * FROM gp_student WHERE name LIKE #{keywords1,jdbcType=VARCHAR} OR name LIKE #{keywords2,jdbcType=VARCHAR}
+        OR name LIKE #{keywords3,jdbcType=VARCHAR}
+    </select>
+</mapper>

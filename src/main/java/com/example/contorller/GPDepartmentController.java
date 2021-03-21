@@ -1,7 +1,6 @@
 package com.example.contorller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.entity.GPCar;
 import com.example.entity.GPStaff;
 import com.example.service.GPStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class GPDepartmentController {
@@ -44,6 +42,9 @@ public class GPDepartmentController {
         System.out.println("员工添加成功");
         return ResponseEntity.ok().build();
     }
+
+
+
     @RequestMapping(value = "/getStaffList")
     public ResponseEntity<HashMap<String, Object>> getStaffList(int curr, int pageSize, String keywords,Integer department,HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -155,6 +156,24 @@ public class GPDepartmentController {
             jsonObject.put("status", "Fail");
             jsonObject.put("message", "车辆信息修改失败！");
         }
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/selectCoach")
+    public ResponseEntity<HashMap<String, Object>> selectCoach(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("获取教练列表");
+        //进行修改前，对用户的详细信息进行查看
+        List<GPStaff> staffList = gpStaffService.selectCoach();
+
+        jsonObject.put("status", "SUCCESS");
+        jsonObject.put("staffInfo", staffList);
+
         writer.write(jsonObject.toJSONString());
         writer.close();
         return ResponseEntity.ok().build();

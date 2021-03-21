@@ -95,5 +95,11 @@ public class GPStaffimpl implements GPStaffService {
         Timestamp update_at = new Timestamp(System.currentTimeMillis());
         return gpStaffMapper.updateStaff(id,name, email,age, phone, address, department, id_no, position,update_at);
     }
+
+    @Override
+    public List<GPStaff> selectCoach() {
+        return gpStaffMapper.selectCoach();
+    }
 }
+
 
