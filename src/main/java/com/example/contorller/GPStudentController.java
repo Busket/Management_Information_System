@@ -43,6 +43,7 @@ public class GPStudentController {
         writer.close();
         return ResponseEntity.ok().build();
     }
+
     @RequestMapping(value = "/getStudentList")
     public ResponseEntity<HashMap<String, Object>> getStudentList(int curr, int pageSize, String keywords, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -80,7 +81,6 @@ public class GPStudentController {
             List<GPStudent> studentList = gpStudnetService.selectAllStudentByKeyword(keywords, curr, pageSize);
             System.out.println("listSize:" + studentList.size());
             System.out.println("开始写入json");
-//                System.out.println(userList.get(1).getCreat_at().toString());
             if (studentList.size() > pageSize) {
                 int startIndex = (curr - 1) * pageSize;//开始截取的位置
                 int toIndex = 0;
@@ -97,11 +97,52 @@ public class GPStudentController {
             }
             jsonObject.put("count", studentList.size());
             jsonObject.put("curr", curr);
-//                System.out.println(jsonObject.toJSONString());
+
             System.out.println("写入json完成");
             writer.write(jsonObject.toJSONString());
             writer.close();
             return ResponseEntity.ok().build();
         }
+    }
+
+    @RequestMapping(value = "/selectStudentById")
+    public ResponseEntity<HashMap<String, Object>> selectStudentById(Integer id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("查找："+id);
+        //进行修改前，搜索学生的详细信息
+        GPStudent gpStudent = gpStudnetService.selectStudentById(id);
+
+        jsonObject.put("status", "SUCCESS");
+        jsonObject.put("studentInfo", gpStudent);
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+
+        return ResponseEntity.ok().build();
+    }
+
+//修改学生信息
+    @RequestMapping(value = "/updateStudent")
+    public ResponseEntity<HashMap<String, Object>> updateStudent(GPStudent gpStudent, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("即将修改："+gpStudent.getId());
+
+        int result = gpStudnetService.updateStudentById(gpStudent);
+        System.out.println(result);
+        if (result == 1) {
+            jsonObject.put("status", "SUCCESS");
+            jsonObject.put("message", "用户信息修改成功！");
+        } else {
+            jsonObject.put("status", "Fail");
+            jsonObject.put("message", "用户信息修改失败！");
+        }
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
     }
 }

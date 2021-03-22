@@ -43,4 +43,15 @@ public class GPStudentimpl implements GPStudnetService {
     public List<GPStudent> selectAllStudentByKeyword(String keywords, int curr, int pageSize) {
         return gpStudentMapper.selectAllStudentByKeyword(keywords+"%","%"+keywords+"%","%"+keywords);
     }
+
+    @Override
+    public GPStudent selectStudentById(Integer id) {
+        return gpStudentMapper.selectStudentById(id);
+    }
+
+    @Override
+    public int updateStudentById(GPStudent gpStudent) {
+        gpStudent.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+        return gpStudentMapper.updateStudentById(gpStudent);
+    }
 }

@@ -11,9 +11,14 @@ import java.util.List;
 @Repository
 public interface GPStudentMapper {
     Integer insertStudent(GPStudent student);
+
     Integer selectStudentCount();
 
     List<GPStudent> selectAllStudent(int row, int pageSize);
 
     List<GPStudent> selectAllStudentByKeyword(String s, String s1, String s2);
+
+    GPStudent selectStudentById(Integer id);
+
+    int updateStudentById(GPStudent gpStudent);
 }

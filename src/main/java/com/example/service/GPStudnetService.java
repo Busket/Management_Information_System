@@ -13,4 +13,8 @@ public interface GPStudnetService {
     List<GPStudent> selectAllStudent(int curr, int pageSize);
 
     List<GPStudent> selectAllStudentByKeyword(String keywords, int curr, int pageSize);
+
+    GPStudent selectStudentById(Integer id);
+
+    int updateStudentById(GPStudent gpStudent);
 }
