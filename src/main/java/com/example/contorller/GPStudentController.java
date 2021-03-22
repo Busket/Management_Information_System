@@ -145,4 +145,29 @@ public class GPStudentController {
         writer.close();
         return ResponseEntity.ok().build();
     }
+//删除学生信息
+
+    @RequestMapping(value = "/deleteStudent")
+    public ResponseEntity<HashMap<String, Object>> deleteStudent(Integer id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("准备删除："+id);
+
+        try {
+            Integer i=gpStudnetService.delStudentById(id);//交由service层进行删除工作
+
+            System.out.println(id + "  删除完成");
+            jsonObject.put("message", "Success");
+        } catch (Exception exception) {
+            System.out.println(id + "删除失败");
+            jsonObject.put("error", exception.toString());
+        }
+        System.out.println("写入json完成");
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
+    }
+
 }

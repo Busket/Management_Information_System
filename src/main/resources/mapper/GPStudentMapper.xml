@@ -122,10 +122,18 @@
     <select id="selectStudentById" parameterType="java.lang.Integer" resultType="com.example.entity.GPStudent">
         select * from gp_student where id = #{id,jdbcType=INTEGER}
     </select>
+    <!--修改学生信息-->
     <update id="updateStudentById" parameterType="com.example.entity.GPStudent">
         update gp_student
-        set name = #{name,jdbcType=VARCHAR},email=#{email,jdbcType=VARCHAR},phone=#{phone,jdbcType=VARCHAR},id_no=#{id_no,jdbcType=VARCHAR},age=#{age,jdbcType=INTEGER},status =
+        set name =
+        #{name,jdbcType=VARCHAR},email=#{email,jdbcType=VARCHAR},phone=#{phone,jdbcType=VARCHAR},id_no=#{id_no,jdbcType=VARCHAR},age=#{age,jdbcType=INTEGER},status
+        =
         #{status,jdbcType=VARCHAR},coach=#{coach,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP},payment=#{payment,jdbcType=VARCHAR},remark=#{remark,jdbcType=VARCHAR}
         where id=#{id,jdbcType=INTEGER}
     </update>
+    <!--删除学生信息-->
+    <delete id="delStudentById" parameterType="java.lang.Integer">
+        delete from gp_student
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
 </mapper>

@@ -54,4 +54,9 @@ public class GPStudentimpl implements GPStudnetService {
         gpStudent.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         return gpStudentMapper.updateStudentById(gpStudent);
     }
+
+    @Override
+    public Integer delStudentById(Integer id) {
+        return gpStudentMapper.delStudentById(id);
+    }
 }

@@ -21,4 +21,6 @@ public interface GPStudentMapper {
     GPStudent selectStudentById(Integer id);
 
     int updateStudentById(GPStudent gpStudent);
+
+    Integer delStudentById(Integer id);
 }
