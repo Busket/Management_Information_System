@@ -123,6 +123,25 @@ public class GPStudentController {
         return ResponseEntity.ok().build();
     }
 
+
+    @RequestMapping(value = "/selectStudentByEmail")
+    public ResponseEntity<HashMap<String, Object>> selectStudentByEmail(String email, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("查找："+email);
+        //进行修改前，搜索学生的详细信息
+        GPStudent gpStudent = gpStudnetService.selectStudentByEmail(email);
+
+        jsonObject.put("status", "SUCCESS");
+        jsonObject.put("studentInfo", gpStudent);
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+
+        return ResponseEntity.ok().build();
+    }
+
 //修改学生信息
     @RequestMapping(value = "/updateStudent")
     public ResponseEntity<HashMap<String, Object>> updateStudent(GPStudent gpStudent, HttpServletRequest request, HttpServletResponse response) throws IOException {

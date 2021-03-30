@@ -23,4 +23,6 @@ public interface GPStudentMapper {
     int updateStudentById(GPStudent gpStudent);
 
     Integer delStudentById(Integer id);
+
+    GPStudent selectStudentByEmail(String email);
 }

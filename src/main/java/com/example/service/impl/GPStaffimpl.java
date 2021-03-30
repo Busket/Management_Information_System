@@ -100,6 +100,11 @@ public class GPStaffimpl implements GPStaffService {
     public List<GPStaff> selectCoach() {
         return gpStaffMapper.selectCoach();
     }
+
+    @Override
+    public GPStaff selectCoachByNumber(String Number) {
+        return gpStaffMapper.selectCoachByNumber(Number);
+    }
 }
 
 

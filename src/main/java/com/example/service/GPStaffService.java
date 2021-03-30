@@ -28,4 +28,7 @@ public interface GPStaffService {
 
     //获取教练列表
     List<GPStaff> selectCoach();
+
+    //获取教练信息（学生）
+    GPStaff selectCoachByNumber(String Number);
 }

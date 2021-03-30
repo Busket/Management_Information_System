@@ -12,11 +12,17 @@
         <result column="status" jdbcType="VARCHAR" property="status"/>
         <result column="coach" jdbcType="VARCHAR" property="coach"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="subject_1" jdbcType="INTEGER" property="subject_1"/>
+        <result column="subject_2" jdbcType="INTEGER" property="subject_2"/>
+        <result column="subject_3" jdbcType="INTEGER" property="subject_3"/>
+        <result column="subject_4" jdbcType="INTEGER" property="subject_4"/>
+        <result column="typeOfClass" jdbcType="VARCHAR" property="typeOfClass"/>
         <result column="create_at" jdbcType="TIMESTAMP" property="create_at"/>
         <result column="update_at" jdbcType="TIMESTAMP" property="update_at"/>
+
     </resultMap>
     <sql id="Base_Column_List">
-        id,number,name,age,email,phone,payment,status,coach,remark,create_at,update_at
+        id,number,name,age,email,phone,payment,status,coach,remark,create_at,update_at,subject_1,subject_2,subject_3,subject_4,typeOfClass
     </sql>
     <!--添加学生-->
     <insert id="insertStudent" parameterType="com.example.entity.GPStudent">
@@ -61,6 +67,9 @@
             <if test="update_at != null">
                 update_at,
             </if>
+            <if test="typeOfClass != null">
+                typeOfClass,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -102,6 +111,9 @@
             <if test="update_at != null">
                 #{update_at,jdbcType=TIMESTAMP},
             </if>
+            <if test="typeOfClass != null">
+                #{typeOfClass,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <!--查找所有用户-->
@@ -126,9 +138,10 @@
     <update id="updateStudentById" parameterType="com.example.entity.GPStudent">
         update gp_student
         set name =
-        #{name,jdbcType=VARCHAR},email=#{email,jdbcType=VARCHAR},phone=#{phone,jdbcType=VARCHAR},id_no=#{id_no,jdbcType=VARCHAR},age=#{age,jdbcType=INTEGER},status
-        =
-        #{status,jdbcType=VARCHAR},coach=#{coach,jdbcType=VARCHAR},update_at=#{update_at,jdbcType=TIMESTAMP},payment=#{payment,jdbcType=VARCHAR},remark=#{remark,jdbcType=VARCHAR}
+        #{name,jdbcType=VARCHAR},email=#{email,jdbcType=VARCHAR},phone=#{phone,jdbcType=VARCHAR},id_no=#{id_no,jdbcType=VARCHAR},
+        age=#{age,jdbcType=INTEGER},status =#{status,jdbcType=VARCHAR},coach=#{coach,jdbcType=VARCHAR},
+        update_at=#{update_at,jdbcType=TIMESTAMP},payment=#{payment,jdbcType=VARCHAR},remark=#{remark,jdbcType=VARCHAR},subject_1=#{subject_1,jdbcType=INTEGER},
+        subject_2=#{subject_2,jdbcType=INTEGER},subject_3=#{subject_3,jdbcType=INTEGER},subject_4=#{subject_4,jdbcType=INTEGER},typeOfClass=#{typeOfClass,jdbcType=VARCHAR}
         where id=#{id,jdbcType=INTEGER}
     </update>
     <!--删除学生信息-->
@@ -136,4 +149,8 @@
         delete from gp_student
         where id = #{id,jdbcType=INTEGER}
     </delete>
+    <!--通过邮箱查找学生信息-->
+    <select id="selectStudentByEmail" parameterType="java.lang.String" resultType="com.example.entity.GPStudent">
+        select * from gp_student where email = #{email,jdbcType=VARCHAR}
+    </select>
 </mapper>

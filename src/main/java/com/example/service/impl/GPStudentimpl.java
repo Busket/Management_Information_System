@@ -59,4 +59,9 @@ public class GPStudentimpl implements GPStudnetService {
     public Integer delStudentById(Integer id) {
         return gpStudentMapper.delStudentById(id);
     }
+
+    @Override
+    public GPStudent selectStudentByEmail(String email) {
+        return gpStudentMapper.selectStudentByEmail(email);
+    }
 }

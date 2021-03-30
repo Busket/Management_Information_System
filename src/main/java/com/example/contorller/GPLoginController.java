@@ -101,7 +101,7 @@ public class GPLoginController {
 
 
     @GetMapping(value = "/logout")
-    public ResponseEntity<Void> logout() {
+    public ResponseEntity<Void> logout(String email, String password, HttpServletRequest request, HttpServletResponse response) {
         Subject subject = SecurityUtils.getSubject();
         if (subject.getPrincipals() != null) {
             GPUser GPUser = (GPUser) subject.getPrincipals().getPrimaryPrincipal();

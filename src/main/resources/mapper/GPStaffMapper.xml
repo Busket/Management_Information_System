@@ -303,4 +303,9 @@
     <select id="selectCoach"  resultType="com.example.entity.GPStaff">
         SELECT name,dept_no FROM gp_dept_jlk
     </select>
+    <!--通过Number查找员工-->
+    <select id="selectCoachByNumber" parameterType="java.lang.String" resultType="com.example.entity.GPStaff">
+        select * from gp_dept_jlk
+        where dept_no = #{dept_no,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -43,8 +43,6 @@ public class GPDepartmentController {
         return ResponseEntity.ok().build();
     }
 
-
-
     @RequestMapping(value = "/getStaffList")
     public ResponseEntity<HashMap<String, Object>> getStaffList(int curr, int pageSize, String keywords,Integer department,HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -97,6 +95,7 @@ public class GPDepartmentController {
         writer.close();
         return ResponseEntity.ok().build();
     }
+
     @RequestMapping(value = "/deleteStaff")
     public ResponseEntity<HashMap<String, Object>> deleteStaff(Integer id, Integer department,HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -173,6 +172,24 @@ public class GPDepartmentController {
 
         jsonObject.put("status", "SUCCESS");
         jsonObject.put("staffInfo", staffList);
+
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/selectCoachByNumber")
+    public ResponseEntity<HashMap<String, Object>> selectCoachByNumber(String Number, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("获取教练列表");
+        //进行修改前，对用户的详细信息进行查看
+        GPStaff coach = gpStaffService.selectCoachByNumber(Number);
+
+        jsonObject.put("status", "SUCCESS");
+        jsonObject.put("coachInfo", coach);
 
         writer.write(jsonObject.toJSONString());
         writer.close();
