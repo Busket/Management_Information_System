@@ -21,4 +21,8 @@ public interface GPStudnetService {
     Integer delStudentById(Integer id);
 
     GPStudent selectStudentByEmail(String email);
+
+    List<GPStudent> selectCoachStudent(int curr, int pageSize, String coach);
+
+    List<GPStudent> selectCoachStudentByKeyword(String keywords, int curr, int pageSize, String coach);
 }

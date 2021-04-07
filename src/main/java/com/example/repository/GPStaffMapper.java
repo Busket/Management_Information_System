@@ -27,4 +27,6 @@ public interface GPStaffMapper {
     List<GPStaff> selectCoach();
 
     GPStaff selectCoachByNumber(String dept_no);
+
+    GPStaff selectStaffByEmail(String email);
 }

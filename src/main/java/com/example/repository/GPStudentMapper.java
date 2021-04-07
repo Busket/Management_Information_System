@@ -16,7 +16,7 @@ public interface GPStudentMapper {
 
     List<GPStudent> selectAllStudent(int row, int pageSize);
 
-    List<GPStudent> selectAllStudentByKeyword(String s, String s1, String s2);
+    List<GPStudent> selectAllStudentByKeyword(String keywords1, String keywords2, String keywords3);
 
     GPStudent selectStudentById(Integer id);
 
@@ -25,4 +25,8 @@ public interface GPStudentMapper {
     Integer delStudentById(Integer id);
 
     GPStudent selectStudentByEmail(String email);
+
+    List<GPStudent> selectCoachStudent(int row, int pageSize, String coach);
+
+    List<GPStudent> selectCoachStudentByKeyword(String keywords1, String keywords2, String keywords3, String coach);
 }

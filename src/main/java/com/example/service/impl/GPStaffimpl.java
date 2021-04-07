@@ -105,6 +105,11 @@ public class GPStaffimpl implements GPStaffService {
     public GPStaff selectCoachByNumber(String Number) {
         return gpStaffMapper.selectCoachByNumber(Number);
     }
+
+    @Override
+    public GPStaff selectStaffByEmail(String email) {
+            return gpStaffMapper.selectStaffByEmail(email);
+    }
 }
 
 

@@ -308,4 +308,9 @@
         select * from gp_dept_jlk
         where dept_no = #{dept_no,jdbcType=VARCHAR}
     </select>
+    <!--通过email查找员工-->
+    <select id="selectStaffByEmail" parameterType="java.lang.String" resultType="com.example.entity.GPStaff">
+        select * from gp_dept_jlk
+        where email = #{email,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -195,4 +195,24 @@ public class GPDepartmentController {
         writer.close();
         return ResponseEntity.ok().build();
     }
+
+    @RequestMapping(value = "/getCoachInfo")
+    public ResponseEntity<HashMap<String, Object>> getCoachInfo(String email, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("单独查询："+email);
+        //进行修改前，对用户的详细信息进行查看
+        GPStaff gpStaff = gpStaffService.selectStaffByEmail(email);
+
+        jsonObject.put("status", "SUCCESS");
+        jsonObject.put("coachInfo", gpStaff);
+
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
+    }
+
+
 }

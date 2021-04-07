@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.repository.GPAppointmentMapper">
+    <resultMap id="BaseResultMap" type="com.example.entity.GPAppointment">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="student_no" jdbcType="VARCHAR" property="student_no"/>
+        <result column="coach_no" jdbcType="VARCHAR" property="coach_no"/>
+        <result column="subject" jdbcType="VARCHAR" property="subject"/>
+        <result column="date" jdbcType="TIMESTAMP" property="date"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_at" jdbcType="TIMESTAMP" property="create_at"/>
+        <result column="update_at" jdbcType="TIMESTAMP" property="update_at"/>
+        <result column="pickUp" jdbcType="VARCHAR" property="pickUp"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,student_no,coach_no,subject,date,time,remark,create_at,update_at,pickUp
+    </sql>
+    <!--添加新的预约-->
+    <insert id="insertAppointment" parameterType="com.example.entity.GPAppointment">
+        insert into gp_appointment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="student_no != null">
+                student_no,
+            </if>
+            <if test="coach_no != null">
+                coach_no,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="create_at != null">
+                create_at,
+            </if>
+            <if test="update_at != null">
+                update_at,
+            </if>
+            <if test="pickUp != null">
+                pickUp
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="student_no != null">
+                #{student_no,jdbcType=VARCHAR},
+            </if>
+            <if test="coach_no != null">
+                #{coach_no,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null">
+                #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="create_at != null">
+                #{create_at,jdbcType=TIMESTAMP},
+            </if>
+            <if test="update_at != null">
+                #{update_at,jdbcType=TIMESTAMP},
+            </if>
+            <if test="pickUp != null">
+                #{pickUp,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--查询学生的预约记录-->
+    <select id="selectAppointmentsBySN" parameterType="java.lang.String" resultType="com.example.entity.GPAppointment">
+        select *
+        from gp_appointment
+        where student_no = #{student_no,jdbcType=VARCHAR}
+    </select>
+
+    <!--删除学生信息-->
+    <delete id="delAppointmentById" parameterType="java.lang.Integer">
+        delete from gp_appointment
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+
+    <!--教练查询学生的预约记录-->
+    <select id="selectAppointmentsByCoach" parameterType="java.lang.String" resultType="com.example.entity.GPAppointment">
+        select * from gp_appointment
+        where coach_no = #{coach,jdbcType=VARCHAR}
+    </select>
+</mapper>
+

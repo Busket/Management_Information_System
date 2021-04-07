@@ -64,4 +64,15 @@ public class GPStudentimpl implements GPStudnetService {
     public GPStudent selectStudentByEmail(String email) {
         return gpStudentMapper.selectStudentByEmail(email);
     }
+
+    @Override
+    public List<GPStudent> selectCoachStudent(int curr, int pageSize, String coach) {
+        int row=(curr-1)*pageSize;
+        return gpStudentMapper.selectCoachStudent(row,pageSize,coach);//读图个参数用于确定行数，从哪开始拿，第二个确定数量
+    }
+
+    @Override
+    public List<GPStudent> selectCoachStudentByKeyword(String keywords, int curr, int pageSize, String coach) {
+        return gpStudentMapper.selectCoachStudentByKeyword(keywords+"%","%"+keywords+"%","%"+keywords,coach);
+    }
 }
