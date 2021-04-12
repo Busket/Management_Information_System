@@ -2,7 +2,9 @@ package com.example.contorller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPStaff;
+import com.example.entity.GPUser;
 import com.example.service.GPStaffService;
+import com.example.service.GPUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import java.util.List;
 public class GPDepartmentController {
     @Autowired
     private GPStaffService gpStaffService;
+    @Autowired
+    private GPUserService gpUserService;
 
     @RequestMapping(value = "/addStaff")
     public ResponseEntity<HashMap<String, Object>> addStaff(GPStaff staff, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -30,7 +34,17 @@ public class GPDepartmentController {
         System.out.println("dept_no:"+staff.getDept_no());
 
         int i = gpStaffService.insertStaff(staff);
-        if (i > 0) {
+        //创建对应的用户
+        GPUser user=new GPUser();
+        if(!staff.getName().isEmpty()){user.setName(staff.getName());}
+        if(!staff.getEmail().isEmpty()){user.setEmail(staff.getEmail());}
+        if(!staff.getPhone().isEmpty()){user.setPhone(staff.getPhone());}
+        if(staff.getDepartment()==213){user.setJurisdiction(103);}//如果是教练，给教练的权限
+        else user.setJurisdiction(104);//设定权限,如果不是教练，则归为行政
+        user.setPassword("123456");//初始密码
+        user.setActivecode("Actived");//设置激活状态
+        int j= gpUserService.insertSelective(user);
+        if (i > 0&&j>0) {
             jsonObject.put("status", "Success");
             jsonObject.put("message", "员工添加成功！");
         } else {

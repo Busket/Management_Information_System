@@ -6,6 +6,7 @@ import com.example.entity.GPStudent;
 import com.example.entity.GPUser;
 import com.example.service.GPStaffService;
 import com.example.service.GPStudnetService;
+import com.example.service.GPUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class GPStudentController {
     @Autowired
     private GPStudnetService gpStudnetService;
+    @Autowired
+    private GPUserService gpUserService;
 
     @RequestMapping(value = "/addStudent")
     public ResponseEntity<HashMap<String, Object>> addStudent(GPStudent student, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -32,7 +35,16 @@ public class GPStudentController {
         JSONObject jsonObject = new JSONObject();
         System.out.println("准备添加一位学生！");
         int i = gpStudnetService.insertStudent(student);
-        if (i > 0) {
+        //创建对应的用户
+        GPUser user=new GPUser();
+        if(!student.getName().isEmpty()){user.setName(student.getName());}
+        if(!student.getEmail().isEmpty()){user.setEmail(student.getEmail());}
+        if(!student.getPhone().isEmpty()){user.setPhone(student.getPhone());}
+        user.setJurisdiction(102);//设定权限
+        user.setPassword("123456");//初始密码
+        user.setActivecode("Actived");//设置激活状态
+        int j= gpUserService.insertSelective(user);
+        if (i > 0&&j>0) {
             jsonObject.put("status", "Success");
             jsonObject.put("message", "学生添加成功！");
         } else {
