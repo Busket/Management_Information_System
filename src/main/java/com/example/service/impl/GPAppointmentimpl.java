@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.entity.GPAppointment;
+import com.example.entity.GPCar;
 import com.example.repository.GPAppointmentMapper;
 import com.example.repository.GPCarMapper;
 import com.example.service.GPAppointmentService;
@@ -40,5 +41,7 @@ public class GPAppointmentimpl implements GPAppointmentService {
     public List<GPAppointment> selectAppointmentsByCoach(String coach) {
         return gpAppointmentMapper.selectAppointmentsByCoach(coach);
     }
+
+
 
 }

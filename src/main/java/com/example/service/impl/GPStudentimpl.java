@@ -52,6 +52,7 @@ public class GPStudentimpl implements GPStudnetService {
     @Override
     public int updateStudentById(GPStudent gpStudent) {
         gpStudent.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+        if(gpStudent.getStatus().equals("完成练车")) gpStudent.setCoach("");
         return gpStudentMapper.updateStudentById(gpStudent);
     }
 

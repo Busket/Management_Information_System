@@ -27,4 +27,6 @@ public interface GPCarService {
 
     //修改车辆信息
     int updateCarById(Integer id, String vin, String carNumber, String brand, Integer status, String chargeMan);
+
+    List<GPCar> selectCarByCoach(String coach);
 }

@@ -180,11 +180,12 @@ public class GPDepartmentController {
 
     @RequestMapping(value = "/selectCoachByNumber")
     public ResponseEntity<HashMap<String, Object>> selectCoachByNumber(String Number, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
         JSONObject jsonObject = new JSONObject();
-        System.out.println("获取教练列表");
+        System.out.println("获取教练"+Number);
         //进行修改前，对用户的详细信息进行查看
         GPStaff coach = gpStaffService.selectCoachByNumber(Number);
 

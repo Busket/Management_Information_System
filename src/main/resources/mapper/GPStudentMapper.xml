@@ -155,7 +155,7 @@
     </select>
     <!--教练查找学生户-->
     <select id="selectCoachStudent"  resultType="com.example.entity.GPStudent">
-        select * from gp_student where coach=#{coach,jdbcType=VARCHAR} limit #{pageSize,jdbcType=INTEGER} offset #{row,jdbcType=INTEGER}
+        select * from gp_student where coach=#{coach,jdbcType=VARCHAR}
     </select>
     <!--（教练）关键字查找学生列表-->
     <select id="selectCoachStudentByKeyword" parameterType="java.lang.String" resultType="com.example.entity.GPStudent">

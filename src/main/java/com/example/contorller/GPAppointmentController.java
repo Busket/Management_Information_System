@@ -2,8 +2,10 @@ package com.example.contorller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.GPAppointment;
+import com.example.entity.GPCar;
 import com.example.entity.GPStudent;
 import com.example.service.GPAppointmentService;
+import com.example.service.GPCarService;
 import com.sun.istack.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,8 @@ import java.util.List;
 public class GPAppointmentController {
     @Autowired
     GPAppointmentService gpAppointmentService;
+    @Autowired
+    GPCarService gpCarService;
 
     @RequestMapping(value = "/makeAppointment")
     public ResponseEntity<HashMap<String, Object>> makeAppointment(GPAppointment appointment, String dat, HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
@@ -151,7 +155,6 @@ public class GPAppointmentController {
         return ResponseEntity.ok().build();
     }
 
-
     @RequestMapping(value = "/coachFindApList")
     public ResponseEntity<HashMap<String, Object>> coachFindApList(String coach, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
@@ -190,6 +193,53 @@ public class GPAppointmentController {
             jsonObject.put("message", "预约查询失败");
         }
         System.out.println("写入json完成");
+        writer.write(jsonObject.toJSONString());
+        writer.close();
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/studentGetCars")
+    public ResponseEntity<HashMap<String, Object>> studentGetCars(String coach,String subject, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+
+        System.out.println("开始搜索教练"+coach+"所负责的：" + subject+"的车辆");
+        Timestamp nowTime = new Timestamp(new Date().getTime());
+        System.out.println("现在的时间是:" + nowTime);
+
+
+        List<GPCar> cars = gpCarService.selectCarByCoach(coach);
+        List<GPCar> childCars = new ArrayList<>();//用于存放筛选结果
+        System.out.println("listSize:" + cars.size());
+        System.out.println("开始判断车辆状态！");
+        for(GPCar car:cars){
+            if(subject.equals("科目二")){
+                if(car.getStatus()==112){
+                    if(!car.getCarNumber().isEmpty()){
+                        childCars.add(car);
+                    }
+                }
+            }else if(subject.equals("科目三")){
+                if(car.getStatus()==113){
+                    if(!car.getCarNumber().isEmpty()){
+                        childCars.add(car);
+                    }
+                }
+            }
+        }
+
+            if (childCars.isEmpty()) {//没有数据的情况
+                jsonObject.put("status", "Empty");
+                jsonObject.put("message", "预约列表为空");
+            } else {
+
+                jsonObject.put("status", "Success");
+                jsonObject.put("cars", childCars);
+                System.out.println("写入cars完成！");
+            }
+
         writer.write(jsonObject.toJSONString());
         writer.close();
         return ResponseEntity.ok().build();

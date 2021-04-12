@@ -12,9 +12,10 @@
         <result column="create_at" jdbcType="TIMESTAMP" property="create_at"/>
         <result column="update_at" jdbcType="TIMESTAMP" property="update_at"/>
         <result column="pickUp" jdbcType="VARCHAR" property="pickUp"/>
+        <result column="car" jdbcType="VARCHAR" property="car"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,student_no,coach_no,subject,date,time,remark,create_at,update_at,pickUp
+        id,student_no,coach_no,subject,date,time,remark,create_at,update_at,pickUp,car
     </sql>
     <!--添加新的预约-->
     <insert id="insertAppointment" parameterType="com.example.entity.GPAppointment">
@@ -48,7 +49,10 @@
                 update_at,
             </if>
             <if test="pickUp != null">
-                pickUp
+                pickUp,
+            </if>
+            <if test="car != null">
+                car
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -81,6 +85,9 @@
             </if>
             <if test="pickUp != null">
                 #{pickUp,jdbcType=VARCHAR},
+            </if>
+            <if test="car != null">
+                #{car,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>

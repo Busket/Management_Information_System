@@ -32,4 +32,6 @@ public interface GPCarMapper {
 
     //修改指定id的车辆信息
     Integer updateCarById(Integer id, String vin, String carNumber, String brand, Integer status, String chargeMan, Timestamp update_at);
+    //查询教练名下的车辆
+    List<GPCar> selectCarByCoach(String coach);
 }

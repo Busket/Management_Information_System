@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.GPAppointment;
+import com.example.entity.GPCar;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface GPAppointmentService {
     Integer delAppointmentById(Integer id);
 
     List<GPAppointment> selectAppointmentsByCoach(String coach);
+
 }

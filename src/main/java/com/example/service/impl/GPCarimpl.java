@@ -56,4 +56,9 @@ public class GPCarimpl implements GPCarService {
         Timestamp update_at=new Timestamp(System.currentTimeMillis());
         return gpCarMapper.updateCarById(id, vin, carNumber, brand, status,chargeMan,update_at);
     }
+
+    @Override
+    public List<GPCar> selectCarByCoach(String coach) {
+        return gpCarMapper.selectCarByCoach(coach);
+    }
 }

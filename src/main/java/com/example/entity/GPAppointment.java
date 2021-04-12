@@ -21,6 +21,15 @@ public class GPAppointment {
     private String remark;//备注
     private Timestamp create_at;//信息创建时间
     private Timestamp update_at;//信息修改时间
+    private String car;//车牌号
+
+    public String getCar() {
+        return car;
+    }
+
+    public void setCar(String car) {
+        this.car = car;
+    }
 
     public Integer getId() {
         return id;

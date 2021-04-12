@@ -207,8 +207,8 @@ public class GPStudentController {
             System.out.println("listSize:" + studentList.size());
             if (!studentList.isEmpty()) {
                 System.out.println("开始写入json");
-                jsonObject.put("count", gpStudnetService.selectStudentCount());
-                jsonObject.put("curr", curr);
+//                jsonObject.put("count", gpStudnetService.selectStudentCount());
+//                jsonObject.put("curr", curr);
                 System.out.println(jsonObject.toJSONString());
                 jsonObject.put("data", studentList);
                 System.out.println("写入json完成");
