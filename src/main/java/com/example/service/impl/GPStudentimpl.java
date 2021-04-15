@@ -1,7 +1,6 @@
 package com.example.service.impl;
 
 import com.example.entity.GPStudent;
-import com.example.entity.GPUser;
 import com.example.repository.GPStudentMapper;
 import com.example.service.GPStudnetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +74,10 @@ public class GPStudentimpl implements GPStudnetService {
     @Override
     public List<GPStudent> selectCoachStudentByKeyword(String keywords, int curr, int pageSize, String coach) {
         return gpStudentMapper.selectCoachStudentByKeyword(keywords+"%","%"+keywords+"%","%"+keywords,coach);
+    }
+
+    @Override
+    public GPStudent selectStudentByNumber(String student_no) {
+        return gpStudentMapper.selectStudentByNumber(student_no);
     }
 }

@@ -82,6 +82,34 @@ public class GPCarController {
         }
     }
 
+    @RequestMapping(value = "/coachFindCarList")
+    public ResponseEntity<HashMap<String, Object>> coachFindCarList(String ChargeMan, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        JSONObject jsonObject = new JSONObject();
+
+
+            List<GPCar> carList = gpCarService.selectCarByCoach(ChargeMan);
+            System.out.println("listSize:" + carList.size());
+            if (!carList.isEmpty()) {
+                System.out.println("开始写入json");
+                System.out.println(jsonObject.toJSONString());
+                jsonObject.put("data", carList);
+                System.out.println("写入json完成");
+                writer.write(jsonObject.toJSONString());
+                writer.close();
+                return ResponseEntity.ok().build();
+            } else {
+                //userList为空的情况
+                System.out.println("carList为空！");
+                jsonObject.put("message", "未能查询到相关信息！");
+                writer.write(jsonObject.toJSONString());
+                writer.close();
+                return ResponseEntity.notFound().build();
+            }
+    }
+
     @RequestMapping(value = "/addCar")
     public ResponseEntity<HashMap<String, Object>> addCar(GPCar car, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");

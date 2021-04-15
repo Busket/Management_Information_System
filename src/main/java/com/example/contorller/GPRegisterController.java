@@ -1,6 +1,7 @@
 package com.example.contorller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.entity.GPStaff;
 import com.example.entity.GPUser;
 import com.example.service.GPUserService;
 import com.example.service.MailService;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 @Controller
@@ -56,7 +58,7 @@ public class GPRegisterController {
             //发送带有邮箱以及激活码的链接，点击后进行确认操作
 //            mailService.sendMimeMail(daUser.getEmail(),"欢迎您使用我们的系统！","请单击以下链接进行确认。\n" +
 //                   "<a href=\"http://localhost:8080/emailconfirm?email="+daUser.getEmail()+"&activecode="+daUser.getActivecode()+"\">激活请点击:这里</a>");
-            //mailService.sendMimeMail(GPUser.getEmail(), "畅途驾校管理系统：\n欢迎您使用我们的系统！", "请复制以下激活码进行确认。\n邮箱：" + GPUser.getEmail() + "\n激活码：" + GPUser.getActivecode());
+            mailService.sendMimeMail(gpUser.getEmail(), "畅途驾校管理系统：\n欢迎您使用我们的系统！", "请复制以下激活码进行确认。\n邮箱：" + gpUser.getEmail() + "\n激活码：" + gpUser.getActivecode());
             return ResponseEntity.ok().build();
         } else {
 //            map.put("code", ConstantUtils.failCode);
@@ -154,5 +156,6 @@ public class GPRegisterController {
         }
         return ResponseEntity.ok().build();
     }
+
 
 }

@@ -134,6 +134,10 @@
     <select id="selectStudentById" parameterType="java.lang.Integer" resultType="com.example.entity.GPStudent">
         select * from gp_student where id = #{id,jdbcType=INTEGER}
     </select>
+    <!--通过student_no查找单个学生-->
+    <select id="selectStudentByNumber" parameterType="java.lang.String" resultType="com.example.entity.GPStudent">
+        select * from gp_student where number = #{student_no,jdbcType=INTEGER}
+    </select>
     <!--修改学生信息-->
     <update id="updateStudentById" parameterType="com.example.entity.GPStudent">
         update gp_student

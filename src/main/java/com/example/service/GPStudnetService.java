@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.entity.GPStudent;
-import com.example.entity.GPUser;
 
 import java.util.List;
 
@@ -25,4 +24,6 @@ public interface GPStudnetService {
     List<GPStudent> selectCoachStudent(int curr, int pageSize, String coach);
 
     List<GPStudent> selectCoachStudentByKeyword(String keywords, int curr, int pageSize, String coach);
+
+    GPStudent selectStudentByNumber(String student_no);
 }

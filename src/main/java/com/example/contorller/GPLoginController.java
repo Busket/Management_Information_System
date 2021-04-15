@@ -99,7 +99,6 @@ public class GPLoginController {
         }
     }
 
-
     @GetMapping(value = "/logout")
     public ResponseEntity<Void> logout(String email, String password, HttpServletRequest request, HttpServletResponse response) {
         Subject subject = SecurityUtils.getSubject();
@@ -111,7 +110,6 @@ public class GPLoginController {
         SecurityUtils.getSubject().logout();
         return ResponseEntity.ok().build();
     }
-
 
     //忘记密码功能
     @RequestMapping(value = "/forgetPassword")

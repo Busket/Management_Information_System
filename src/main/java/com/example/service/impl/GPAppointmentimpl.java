@@ -42,6 +42,10 @@ public class GPAppointmentimpl implements GPAppointmentService {
         return gpAppointmentMapper.selectAppointmentsByCoach(coach);
     }
 
+    @Override
+    public List<GPAppointment> selectAppointmentsByCarNumber(String car_no) {
+        return gpAppointmentMapper.selectAppointmentsByCarNumber(car_no);
+    }
 
 
 }

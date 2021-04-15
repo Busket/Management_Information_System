@@ -1,7 +1,6 @@
 package com.example.repository;
 
 import com.example.entity.GPStudent;
-import com.example.entity.GPUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -29,4 +28,6 @@ public interface GPStudentMapper {
     List<GPStudent> selectCoachStudent(int row, int pageSize, String coach);
 
     List<GPStudent> selectCoachStudentByKeyword(String keywords1, String keywords2, String keywords3, String coach);
+
+    GPStudent selectStudentByNumber(String student_no);
 }

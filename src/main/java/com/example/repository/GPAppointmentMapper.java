@@ -17,4 +17,6 @@ public interface GPAppointmentMapper {
     Integer delAppointmentById(Integer id);
 
     List<GPAppointment> selectAppointmentsByCoach(String coach);
+
+    List<GPAppointment> selectAppointmentsByCarNumber(String car_no);
 }

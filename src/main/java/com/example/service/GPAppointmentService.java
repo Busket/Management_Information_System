@@ -14,4 +14,5 @@ public interface GPAppointmentService {
 
     List<GPAppointment> selectAppointmentsByCoach(String coach);
 
+    List<GPAppointment> selectAppointmentsByCarNumber(String car_no);
 }
